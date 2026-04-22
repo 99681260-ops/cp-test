@@ -1,0 +1,1018 @@
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>你是哪种CP体质？| 磕学研究所</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;700;900&family=Ma+Shan+Zheng&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --pink: #FF6B9D;
+    --deep-pink: #C2185B;
+    --blush: #FFD6E7;
+    --cream: #FFF8F0;
+    --gold: #FFD166;
+    --purple: #9B59B6;
+    --dark: #1a0a0f;
+    --text: #3d1a2a;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--cream);
+    font-family: 'Noto Serif SC', serif;
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(255,107,157,0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 80%, rgba(155,89,182,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 50% 50%, rgba(255,209,102,0.08) 0%, transparent 70%);
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .floating-emojis {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .emoji-float {
+    position: absolute;
+    font-size: 1.5rem;
+    opacity: 0.15;
+    animation: floatUp linear infinite;
+  }
+
+  @keyframes floatUp {
+    0% { transform: translateY(110vh) rotate(0deg); opacity: 0; }
+    10% { opacity: 0.15; }
+    90% { opacity: 0.15; }
+    100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    max-width: 480px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+  }
+
+  /* ===== SCREENS ===== */
+  .screen { display: none; }
+  .screen.active { display: block; animation: fadeIn 0.5s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ===== INTRO SCREEN ===== */
+  .intro-header {
+    text-align: center;
+    padding: 60px 0 40px;
+  }
+
+  .logo-badge {
+    display: inline-block;
+    background: var(--dark);
+    color: var(--gold);
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    padding: 6px 16px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+    font-family: 'Noto Serif SC', serif;
+  }
+
+  .main-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 3.2rem;
+    line-height: 1.15;
+    color: var(--dark);
+    margin-bottom: 8px;
+  }
+
+  .main-title span {
+    color: var(--pink);
+    display: block;
+  }
+
+  .subtitle {
+    font-size: 0.85rem;
+    color: #9a6b7a;
+    letter-spacing: 0.08em;
+    margin-bottom: 40px;
+  }
+
+  .hero-visual {
+    width: 200px;
+    height: 200px;
+    margin: 0 auto 40px;
+    position: relative;
+  }
+
+  .hero-circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 5rem;
+    box-shadow: 0 20px 60px rgba(255,107,157,0.4), 0 0 0 20px rgba(255,107,157,0.1);
+    animation: pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { transform: scale(1); box-shadow: 0 20px 60px rgba(255,107,157,0.4), 0 0 0 20px rgba(255,107,157,0.1); }
+    50% { transform: scale(1.05); box-shadow: 0 25px 70px rgba(255,107,157,0.5), 0 0 0 30px rgba(255,107,157,0.05); }
+  }
+
+  .intro-card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 24px;
+    border: 1.5px solid rgba(255,107,157,0.2);
+    box-shadow: 0 8px 30px rgba(255,107,157,0.08);
+  }
+
+  .intro-card h3 {
+    font-size: 0.9rem;
+    color: var(--pink);
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+
+  .type-preview {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .type-chip {
+    background: var(--blush);
+    border-radius: 12px;
+    padding: 10px 12px;
+    font-size: 0.78rem;
+    color: var(--deep-pink);
+    font-weight: 700;
+  }
+
+  .type-chip .chip-emoji { font-size: 1.2rem; display: block; margin-bottom: 2px; }
+
+  .btn-primary {
+    display: block;
+    width: 100%;
+    background: linear-gradient(135deg, var(--pink), var(--deep-pink));
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 18px;
+    font-size: 1.1rem;
+    font-family: 'Noto Serif SC', serif;
+    font-weight: 700;
+    cursor: pointer;
+    letter-spacing: 0.1em;
+    box-shadow: 0 8px 25px rgba(194,24,91,0.35);
+    transition: all 0.3s ease;
+    margin-bottom: 12px;
+  }
+
+  .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 35px rgba(194,24,91,0.45);
+  }
+
+  .btn-primary:active { transform: translateY(0); }
+
+  .fine-print {
+    text-align: center;
+    font-size: 0.72rem;
+    color: #b8909a;
+    letter-spacing: 0.05em;
+  }
+
+  /* ===== QUESTION SCREEN ===== */
+  .progress-header {
+    padding: 40px 0 30px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .progress-nums {
+    font-size: 0.8rem;
+    color: var(--pink);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  .progress-bar-wrap {
+    flex: 1;
+    height: 4px;
+    background: var(--blush);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  .progress-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--deep-pink));
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  .q-category {
+    font-size: 0.72rem;
+    color: var(--pink);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    opacity: 0.8;
+  }
+
+  .q-text {
+    font-size: 1.35rem;
+    line-height: 1.6;
+    color: var(--dark);
+    margin-bottom: 32px;
+    font-weight: 700;
+  }
+
+  .options-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .option-btn {
+    background: white;
+    border: 2px solid rgba(255,107,157,0.2);
+    border-radius: 16px;
+    padding: 16px 20px;
+    text-align: left;
+    cursor: pointer;
+    font-family: 'Noto Serif SC', serif;
+    font-size: 0.9rem;
+    color: var(--text);
+    line-height: 1.5;
+    transition: all 0.25s ease;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .option-btn .opt-icon {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background: var(--blush);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--deep-pink);
+    flex-shrink: 0;
+    margin-top: 1px;
+    transition: all 0.25s;
+  }
+
+  .option-btn:hover {
+    border-color: var(--pink);
+    background: var(--blush);
+    transform: translateX(4px);
+  }
+
+  .option-btn:hover .opt-icon {
+    background: var(--pink);
+    color: white;
+  }
+
+  .option-btn.selected {
+    border-color: var(--deep-pink);
+    background: linear-gradient(135deg, rgba(255,107,157,0.08), rgba(194,24,91,0.05));
+  }
+
+  .option-btn.selected .opt-icon {
+    background: var(--deep-pink);
+    color: white;
+  }
+
+  /* ===== LOADING SCREEN ===== */
+  .loading-screen {
+    text-align: center;
+    padding: 80px 20px;
+  }
+
+  .loading-orb {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--pink), var(--purple));
+    margin: 0 auto 40px;
+    animation: orbSpin 2s ease-in-out infinite;
+    box-shadow: 0 0 60px rgba(255,107,157,0.5);
+  }
+
+  @keyframes orbSpin {
+    0%, 100% { transform: scale(1) rotate(0deg); }
+    50% { transform: scale(1.1) rotate(180deg); border-radius: 30%; }
+  }
+
+  .loading-text {
+    font-size: 1.1rem;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+
+  .loading-sub {
+    font-size: 0.8rem;
+    color: #9a6b7a;
+  }
+
+  /* ===== RESULT SCREEN ===== */
+  .result-header {
+    text-align: center;
+    padding: 50px 0 30px;
+  }
+
+  .result-label {
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    color: var(--pink);
+    margin-bottom: 8px;
+  }
+
+  .result-title {
+    font-family: 'Ma Shan Zheng', cursive;
+    font-size: 2.8rem;
+    color: var(--dark);
+    line-height: 1.2;
+    margin-bottom: 6px;
+  }
+
+  .result-subtitle {
+    font-size: 0.85rem;
+    color: #9a6b7a;
+  }
+
+  .result-hero {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    margin: 30px auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 4.5rem;
+    position: relative;
+  }
+
+  .result-hero::after {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border-radius: 50%;
+    border: 2px dashed var(--pink);
+    animation: spin 8s linear infinite;
+    opacity: 0.5;
+  }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .result-card {
+    background: white;
+    border-radius: 24px;
+    padding: 28px;
+    margin-bottom: 16px;
+    border: 1.5px solid rgba(255,107,157,0.15);
+    box-shadow: 0 8px 30px rgba(255,107,157,0.06);
+  }
+
+  .result-card h4 {
+    font-size: 0.75rem;
+    color: var(--pink);
+    letter-spacing: 0.15em;
+    margin-bottom: 14px;
+  }
+
+  .result-desc {
+    font-size: 0.95rem;
+    line-height: 1.8;
+    color: var(--text);
+  }
+
+  .trait-list { display: flex; flex-wrap: wrap; gap: 8px; }
+
+  .trait-tag {
+    background: var(--blush);
+    color: var(--deep-pink);
+    border-radius: 20px;
+    padding: 6px 14px;
+    font-size: 0.8rem;
+    font-weight: 700;
+  }
+
+  .stat-bars { display: flex; flex-direction: column; gap: 14px; }
+
+  .stat-row { }
+  .stat-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .stat-label span:last-child { color: var(--pink); font-weight: 700; }
+
+  .stat-bar {
+    height: 6px;
+    background: var(--blush);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .stat-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--pink), var(--deep-pink));
+    border-radius: 3px;
+    animation: barGrow 1s ease forwards;
+    transform-origin: left;
+  }
+
+  @keyframes barGrow {
+    from { width: 0 !important; }
+  }
+
+  .cp-match-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+  }
+
+  .cp-match-item {
+    background: var(--blush);
+    border-radius: 14px;
+    padding: 14px;
+    text-align: center;
+  }
+
+  .cp-match-item .match-emoji { font-size: 1.8rem; display: block; margin-bottom: 4px; }
+  .cp-match-item .match-name { font-size: 0.85rem; font-weight: 700; color: var(--deep-pink); display: block; }
+  .cp-match-item .match-pct { font-size: 0.7rem; color: #9a6b7a; }
+
+  .share-section {
+    text-align: center;
+    padding: 20px 0 10px;
+  }
+
+  .share-hint {
+    font-size: 0.78rem;
+    color: #9a6b7a;
+    margin-bottom: 16px;
+    letter-spacing: 0.05em;
+  }
+
+  .btn-secondary {
+    display: inline-block;
+    background: transparent;
+    border: 2px solid var(--pink);
+    color: var(--pink);
+    border-radius: 50px;
+    padding: 12px 32px;
+    font-size: 0.9rem;
+    font-family: 'Noto Serif SC', serif;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin: 0 6px;
+  }
+
+  .btn-secondary:hover {
+    background: var(--pink);
+    color: white;
+  }
+
+  .result-footer {
+    text-align: center;
+    padding: 20px 0;
+    font-size: 0.72rem;
+    color: #c9a0b0;
+    letter-spacing: 0.05em;
+  }
+
+</style>
+</head>
+<body>
+
+<div class="floating-emojis" id="floatingEmojis"></div>
+
+<div class="container">
+
+  <!-- INTRO SCREEN -->
+  <div class="screen active" id="screen-intro">
+    <div class="intro-header">
+      <div class="logo-badge">✦ 磕学研究所出品 ✦</div>
+      <div class="main-title">你是<span>哪种CP体质？</span></div>
+      <div class="subtitle">12题深度测评 · 解锁你的磕学人格</div>
+    </div>
+
+    <div class="hero-visual">
+      <div class="hero-circle">💘</div>
+    </div>
+
+    <div class="intro-card">
+      <h3>✦ 六大CP人格，你是哪一型？</h3>
+      <div class="type-preview">
+        <div class="type-chip"><span class="chip-emoji">🔥</span>磕疯体质</div>
+        <div class="type-chip"><span class="chip-emoji">🌸</span>佛系旁观</div>
+        <div class="type-chip"><span class="chip-emoji">🕵️</span>侦探嗑学家</div>
+        <div class="type-chip"><span class="chip-emoji">💔</span>BE美学派</div>
+        <div class="type-chip"><span class="chip-emoji">👑</span>本命至上</div>
+        <div class="type-chip"><span class="chip-emoji">🌊</span>随缘磕糖</div>
+      </div>
+    </div>
+
+    <button class="btn-primary" onclick="startTest()">开始测评 →</button>
+    <div class="fine-print">共12题 · 约3分钟完成 · 结果可截图分享</div>
+  </div>
+
+  <!-- QUESTION SCREEN -->
+  <div class="screen" id="screen-question">
+    <div class="progress-header">
+      <div class="progress-nums" id="progress-nums">1 / 12</div>
+      <div class="progress-bar-wrap">
+        <div class="progress-bar-fill" id="progress-fill" style="width: 8%"></div>
+      </div>
+    </div>
+
+    <div class="q-category" id="q-category">基础磕学</div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options-list" id="options-list"></div>
+  </div>
+
+  <!-- LOADING SCREEN -->
+  <div class="screen" id="screen-loading">
+    <div class="loading-screen">
+      <div class="loading-orb"></div>
+      <div class="loading-text" id="loading-text">磕学研究所分析中...</div>
+      <div class="loading-sub">正在为你解码CP人格基因</div>
+    </div>
+  </div>
+
+  <!-- RESULT SCREEN -->
+  <div class="screen" id="screen-result">
+    <div class="result-header">
+      <div class="result-label">你的CP体质是</div>
+      <div class="result-title" id="result-title"></div>
+      <div class="result-subtitle" id="result-subtitle"></div>
+    </div>
+
+    <div class="result-hero" id="result-hero"></div>
+
+    <div class="result-card">
+      <h4>✦ 人格解读</h4>
+      <div class="result-desc" id="result-desc"></div>
+    </div>
+
+    <div class="result-card">
+      <h4>✦ 你的标签</h4>
+      <div class="trait-list" id="result-traits"></div>
+    </div>
+
+    <div class="result-card">
+      <h4>✦ 磕学指数</h4>
+      <div class="stat-bars" id="result-stats"></div>
+    </div>
+
+    <div class="result-card">
+      <h4>✦ 最配CP搭档</h4>
+      <div class="cp-match-grid" id="result-matches"></div>
+    </div>
+
+    <div class="share-section">
+      <div class="share-hint">💌 截图分享，让朋友也来测一测</div>
+      <button class="btn-secondary" onclick="restartTest()">再测一次</button>
+      <button class="btn-primary" style="margin-top:16px" onclick="shareResult()">分享给朋友 ✦</button>
+    </div>
+
+    <div class="result-footer">磕学研究所 · 仅供娱乐 · 结果不代表真实人格</div>
+  </div>
+
+</div>
+
+<script>
+// ===== DATA =====
+const questions = [
+  {
+    category: "🌸 磕糖基础",
+    text: "你看到喜欢的CP出了新的互动视频，第一反应是？",
+    options: [
+      { text: "立刻点开，反复回看十遍，截图发到群里", scores: { fanatic: 3, detective: 1 } },
+      { text: "点收藏，等有空了再慢慢看", scores: { casual: 2, buddha: 1 } },
+      { text: "先去扒一遍评论区，收集大家的分析", scores: { detective: 3, fanatic: 1 } },
+      { text: "看完感叹一句「好甜」，继续该干嘛干嘛", scores: { buddha: 3, casual: 1 } },
+    ]
+  },
+  {
+    category: "💔 BE免疫力",
+    text: "你磕的CP官宣恋情了，但对象不是对方，你会？",
+    options: [
+      { text: "崩溃三天，发一篇长文告别这对CP", scores: { fanatic: 3, be: 1 } },
+      { text: "接受现实，继续嗑他们的友情线", scores: { casual: 2, buddha: 1 } },
+      { text: "觉得这才是BE美学的开始，爱上了这种虐感", scores: { be: 3, detective: 1 } },
+      { text: "早就预料到了，嗑的就是这种擦肩而过的遗憾", scores: { be: 2, buddha: 1 } },
+    ]
+  },
+  {
+    category: "🕵️ 侦探天赋",
+    text: "CP的两人在同一个城市，你会？",
+    options: [
+      { text: "对比两人的行程帖，找出时间地点的重合", scores: { detective: 3, fanatic: 1 } },
+      { text: "等有人扒出来再说，自己不太会分析", scores: { buddha: 2, casual: 1 } },
+      { text: "刷到相关帖子会看，但不会主动去找证据", scores: { casual: 2 } },
+      { text: "觉得没必要，喜欢就喜欢，不用证明", scores: { buddha: 3 } },
+    ]
+  },
+  {
+    category: "👑 本命忠诚度",
+    text: "你的本命CP会被别的CP取代吗？",
+    options: [
+      { text: "不可能！本命就是本命，一生一世", scores: { main: 3, fanatic: 1 } },
+      { text: "可能会有新欢，但本命的地位依然特殊", scores: { main: 2, casual: 1 } },
+      { text: "随缘，新磕的香就换", scores: { casual: 3 } },
+      { text: "我会同时磕很多，没有所谓本命", scores: { casual: 2, buddha: 1 } },
+    ]
+  },
+  {
+    category: "🔥 磕糖烈度",
+    text: "群里有人po出CP的新糖，你在深夜看到了？",
+    options: [
+      { text: "睡意全无，兴奋到凌晨三点还在复盘", scores: { fanatic: 3 } },
+      { text: "点个赞，明天再细看", scores: { buddha: 3 } },
+      { text: "立刻打开，同时召唤群友起来一起嗑", scores: { fanatic: 2, casual: 1 } },
+      { text: "保存截图，心里美滋滋，然后继续睡觉", scores: { casual: 2, buddha: 1 } },
+    ]
+  },
+  {
+    category: "💌 创作冲动",
+    text: "嗑到甜甜的糖之后，你有创作冲动吗？",
+    options: [
+      { text: "会！脑子里已经开始写同人文了", scores: { fanatic: 2, detective: 1 } },
+      { text: "会做个合集视频或截图整理", scores: { detective: 2, casual: 1 } },
+      { text: "只会在评论区留言「嗑死我了」", scores: { casual: 2 } },
+      { text: "欣赏别人的创作就够了，自己不会动手", scores: { buddha: 3 } },
+    ]
+  },
+  {
+    category: "🌊 BE美学",
+    text: "你更喜欢哪种CP故事走向？",
+    options: [
+      { text: "HE！一定要在一起，不然不认", scores: { main: 3, fanatic: 1 } },
+      { text: "BE更有滋味，虐哭我才算成功", scores: { be: 3 } },
+      { text: "开放结局最美，留白才有想象空间", scores: { be: 2, buddha: 1 } },
+      { text: "都行，只要人物足够立体", scores: { buddha: 2, detective: 1 } },
+    ]
+  },
+  {
+    category: "🕵️ 分析能力",
+    text: "看CP的互动时，你会关注什么？",
+    options: [
+      { text: "眼神、肢体语言、微表情，细节控", scores: { detective: 3 } },
+      { text: "整体氛围够不够甜，有没有视觉冲击", scores: { fanatic: 2, casual: 1 } },
+      { text: "故事背景和两人关系的发展脉络", scores: { detective: 2, main: 1 } },
+      { text: "好看就行，不太分析", scores: { casual: 2, buddha: 1 } },
+    ]
+  },
+  {
+    category: "👑 忠诚考验",
+    text: "你喜欢的CP成员在采访里否认了你嗑的关系，你会？",
+    options: [
+      { text: "「嘴上说不要，但身体很诚实」继续磕", scores: { fanatic: 3, detective: 1 } },
+      { text: "有点受伤，但还是默默守护", scores: { main: 2, be: 1 } },
+      { text: "尊重本人意愿，降低热度，佛系关注", scores: { buddha: 3 } },
+      { text: "把这段话存下来，当BE虐文素材", scores: { be: 3 } },
+    ]
+  },
+  {
+    category: "🌸 社交分享",
+    text: "在朋友圈/微博，你的CP相关内容发帖频率？",
+    options: [
+      { text: "天天发，我的时间线就是CP主题", scores: { fanatic: 3 } },
+      { text: "有特别好的糖才发，不刷屏", scores: { casual: 2, main: 1 } },
+      { text: "只在粉丝群内部分享，不外放", scores: { detective: 2, main: 1 } },
+      { text: "从不发，磕糖是私人的快乐", scores: { buddha: 3 } },
+    ]
+  },
+  {
+    category: "💔 虐感需求",
+    text: "你嗑CP，更享受哪种体验？",
+    options: [
+      { text: "甜到发腻，恨不得把他们黏在一起", scores: { fanatic: 2, main: 1 } },
+      { text: "越虐越上头，BE才是最高境界", scores: { be: 3 } },
+      { text: "不甜不虐，就欣赏两个人的化学反应", scores: { detective: 2, buddha: 1 } },
+      { text: "随意，看缘分，今天想甜就甜，想虐就虐", scores: { casual: 3 } },
+    ]
+  },
+  {
+    category: "🔥 磕糖终极",
+    text: "如果你磕的CP真的在一起了，你会怎样？",
+    options: [
+      { text: "哭着说「我就知道！」然后磕得更疯", scores: { fanatic: 3 } },
+      { text: "默默开心，保护他们的隐私", scores: { main: 3, buddha: 1 } },
+      { text: "反而有点失落，嗑的就是那种「可能性」", scores: { be: 2, casual: 1 } },
+      { text: "祝福就好，继续我的其他CP", scores: { casual: 2, buddha: 1 } },
+    ]
+  }
+];
+
+const results = {
+  fanatic: {
+    title: "磕疯体质",
+    subtitle: "你不是在嗑糖，你是糖本人",
+    emoji: "🔥",
+    bg: "linear-gradient(135deg, #FF6B9D, #FF8E53)",
+    desc: "你就是粉圈里那种「自带热场BGM」的存在。一颗糖能让你high一整天，一段互动能分析三个小时。对你来说，磕CP不是爱好，是信仰。你的手机相册里装着无数截图，你的脑子里随时在跑同人剧情。你是CP的第一个安利者，也是最后一个弃坑的人。",
+    traits: ["截图狂魔", "自带热场", "反复回看", "群里氛围担当", "安利体质"],
+    stats: [
+      { label: "磕糖烈度", value: 98 },
+      { label: "情感投入", value: 92 },
+      { label: "创作冲动", value: 85 },
+      { label: "BE免疫力", value: 20 },
+    ],
+    matches: [
+      { emoji: "🕵️", name: "侦探嗑学家", pct: "天作之合" },
+      { emoji: "🌊", name: "随缘磕糖", pct: "互补搭档" },
+      { emoji: "💔", name: "BE美学派", pct: "虐甜结合" },
+      { emoji: "👑", name: "本命至上", pct: "同道中人" },
+    ]
+  },
+  detective: {
+    title: "侦探嗑学家",
+    subtitle: "糖没有你找不到的，只有你想不到的",
+    emoji: "🕵️",
+    bg: "linear-gradient(135deg, #667eea, #764ba2)",
+    desc: "你是CP圈里最冷静也最危险的那种人。表面上波澜不惊，内心里已经把两个人的日程表对比了三遍。你对细节有超乎寻常的敏感度——眼神的偏移、座位的距离、一个不经意的微笑，都逃不过你的眼睛。你不只是嗑糖，你是在建立一个完整的「证据体系」。",
+    traits: ["细节控", "证据党", "理性磕糖", "分析能力满级", "冷静外表"],
+    stats: [
+      { label: "分析能力", value: 99 },
+      { label: "细节敏感度", value: 95 },
+      { label: "理性程度", value: 88 },
+      { label: "情绪波动", value: 45 },
+    ],
+    matches: [
+      { emoji: "🔥", name: "磕疯体质", pct: "天作之合" },
+      { emoji: "👑", name: "本命至上", pct: "深度搭档" },
+      { emoji: "🌸", name: "佛系旁观", pct: "互相救赎" },
+      { emoji: "💔", name: "BE美学派", pct: "脑洞碰撞" },
+    ]
+  },
+  buddha: {
+    title: "佛系旁观",
+    subtitle: "磕糖届的老僧入定",
+    emoji: "🌸",
+    bg: "linear-gradient(135deg, #f093fb, #f5576c)",
+    desc: "你对CP有爱，但这份爱轻盈而自在。你不会为了一颗糖兴奋到失眠，也不会因为BE而崩溃三天。你享受甜蜜，但不执着于结果。在磕学的世界里，你是最接近「禅意」的存在。朋友说你是真正看破了——其实你只是把美好的部分留给自己，把其余的都放下了。",
+    traits: ["随遇而安", "不内耗", "保持距离", "享受当下", "佛系快乐"],
+    stats: [
+      { label: "心态平稳度", value: 97 },
+      { label: "佛系程度", value: 94 },
+      { label: "生活平衡感", value: 90 },
+      { label: "磕糖烈度", value: 35 },
+    ],
+    matches: [
+      { emoji: "🌊", name: "随缘磕糖", pct: "平静同行" },
+      { emoji: "🕵️", name: "侦探嗑学家", pct: "互相欣赏" },
+      { emoji: "🔥", name: "磕疯体质", pct: "带你入坑" },
+      { emoji: "💔", name: "BE美学派", pct: "意外共鸣" },
+    ]
+  },
+  be: {
+    title: "BE美学派",
+    subtitle: "遗憾才是最美的糖",
+    emoji: "💔",
+    bg: "linear-gradient(135deg, #a18cd1, #fbc2eb)",
+    desc: "你是那种能在悲剧里找到美感的人。别人嗑HE，你偏偏对BE情有独钟。你享受那种「知道结局是遗憾，却还是义无反顾爱上」的感觉。在你看来，圆满的结局少了一份滋味，正是那些错过、别离、不能言说的情愫，才构成了最动人的故事。你的眼泪是献给美的祭品。",
+    traits: ["BE免疫超强", "审美独到", "享受虐感", "遗憾美学", "情感深度"],
+    stats: [
+      { label: "BE承受力", value: 99 },
+      { label: "审美深度", value: 92 },
+      { label: "情感厚度", value: 88 },
+      { label: "HE渴望度", value: 15 },
+    ],
+    matches: [
+      { emoji: "🕵️", name: "侦探嗑学家", pct: "灵魂共鸣" },
+      { emoji: "🌸", name: "佛系旁观", pct: "意外懂得" },
+      { emoji: "👑", name: "本命至上", pct: "虐甜交融" },
+      { emoji: "🔥", name: "磕疯体质", pct: "情绪感染" },
+    ]
+  },
+  main: {
+    title: "本命至上",
+    subtitle: "我的本命只有一个，那就是你",
+    emoji: "👑",
+    bg: "linear-gradient(135deg, #FFD166, #FF6B9D)",
+    desc: "你对本命CP的忠诚度可以用「宗教级别」来形容。别人三天换一对，你却可以守护同一对CP三年不弃。你了解他们的每一个细节，记得每一个重要的日期，在别人都弃坑的时候你还在默默守护。这不是偏执，这是一种深情——用最纯粹的方式，爱你选定的那对人。",
+    traits: ["忠诚满级", "记忆力超群", "深情守护", "抗弃坑体质", "时间管理大师"],
+    stats: [
+      { label: "本命忠诚度", value: 100 },
+      { label: "记忆深度", value: 93 },
+      { label: "守护意志", value: 95 },
+      { label: "移情概率", value: 8 },
+    ],
+    matches: [
+      { emoji: "🔥", name: "磕疯体质", pct: "守护同行" },
+      { emoji: "💔", name: "BE美学派", pct: "深情共鸣" },
+      { emoji: "🕵️", name: "侦探嗑学家", pct: "互相成就" },
+      { emoji: "🌸", name: "佛系旁观", pct: "学习取经" },
+    ]
+  },
+  casual: {
+    title: "随缘磕糖",
+    subtitle: "世界是我的糖果店",
+    emoji: "🌊",
+    bg: "linear-gradient(135deg, #43e97b, #38f9d7)",
+    desc: "你是CP世界里最快乐的那种人。没有执念，只有快乐。今天嗑这对，明天嗑那对，每一段都能找到让你心动的点。你不纠结结局，不执着证据，不在乎别人怎么看。对你来说，磕糖是一种生活方式——轻盈的，自由的，随时可以出发，随时可以停靠。",
+    traits: ["多线程磕糖", "心态超好", "快乐为本", "不内耗", "随遇而安"],
+    stats: [
+      { label: "快乐指数", value: 97 },
+      { label: "自由度", value: 95 },
+      { label: "适应能力", value: 90 },
+      { label: "本命专一度", value: 22 },
+    ],
+    matches: [
+      { emoji: "🌸", name: "佛系旁观", pct: "精神同类" },
+      { emoji: "🔥", name: "磕疯体质", pct: "带你上头" },
+      { emoji: "👑", name: "本命至上", pct: "神奇互补" },
+      { emoji: "🕵️", name: "侦探嗑学家", pct: "线索提供者" },
+    ]
+  }
+};
+
+// ===== STATE =====
+let currentQ = 0;
+let scores = { fanatic: 0, detective: 0, buddha: 0, be: 0, main: 0, casual: 0 };
+let answered = [];
+
+// ===== FLOATING EMOJIS =====
+const emojis = ['💘', '✨', '🌸', '💕', '⭐', '🔥', '💫', '🌙', '💝', '🌺'];
+const container = document.getElementById('floatingEmojis');
+for (let i = 0; i < 15; i++) {
+  const el = document.createElement('div');
+  el.className = 'emoji-float';
+  el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
+  el.style.left = Math.random() * 100 + '%';
+  el.style.animationDuration = (8 + Math.random() * 12) + 's';
+  el.style.animationDelay = (Math.random() * 10) + 's';
+  el.style.fontSize = (1 + Math.random() * 1.5) + 'rem';
+  container.appendChild(el);
+}
+
+// ===== FUNCTIONS =====
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function startTest() {
+  currentQ = 0;
+  scores = { fanatic: 0, detective: 0, buddha: 0, be: 0, main: 0, casual: 0 };
+  answered = [];
+  renderQuestion();
+  showScreen('screen-question');
+}
+
+function renderQuestion() {
+  const q = questions[currentQ];
+  document.getElementById('progress-nums').textContent = `${currentQ + 1} / ${questions.length}`;
+  document.getElementById('progress-fill').style.width = `${((currentQ + 1) / questions.length) * 100}%`;
+  document.getElementById('q-category').textContent = q.category;
+  document.getElementById('q-text').textContent = q.text;
+
+  const letters = ['A', 'B', 'C', 'D'];
+  const list = document.getElementById('options-list');
+  list.innerHTML = '';
+
+  q.options.forEach((opt, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'option-btn';
+    btn.innerHTML = `<span class="opt-icon">${letters[i]}</span><span>${opt.text}</span>`;
+    btn.onclick = () => selectOption(i, opt.scores, btn);
+    list.appendChild(btn);
+  });
+}
+
+function selectOption(idx, scoreMap, btn) {
+  // Visual feedback
+  document.querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+
+  // Add scores
+  Object.entries(scoreMap).forEach(([key, val]) => {
+    scores[key] = (scores[key] || 0) + val;
+  });
+
+  setTimeout(() => {
+    currentQ++;
+    if (currentQ < questions.length) {
+      renderQuestion();
+    } else {
+      showLoading();
+    }
+  }, 350);
+}
+
+function showLoading() {
+  showScreen('screen-loading');
+  const msgs = [
+    "磕学研究所分析中...",
+    "正在解析你的糖分浓度...",
+    "检测CP雷达灵敏度...",
+    "计算BE免疫指数...",
+    "磕学人格解码完成！"
+  ];
+  let i = 0;
+  const interval = setInterval(() => {
+    document.getElementById('loading-text').textContent = msgs[Math.min(i, msgs.length - 1)];
+    i++;
+  }, 600);
+
+  setTimeout(() => {
+    clearInterval(interval);
+    showResult();
+  }, 3200);
+}
+
+function showResult() {
+  // Find winner
+  const winner = Object.entries(scores).sort((a, b) => b[1] - a[1])[0][0];
+  const r = results[winner];
+
+  document.getElementById('result-title').textContent = r.title;
+  document.getElementById('result-subtitle').textContent = r.subtitle;
+
+  const hero = document.getElementById('result-hero');
+  hero.textContent = r.emoji;
+  hero.style.background = r.bg;
+  hero.style.boxShadow = `0 20px 60px rgba(255,107,157,0.4)`;
+
+  document.getElementById('result-desc').textContent = r.desc;
+
+  const traitsEl = document.getElementById('result-traits');
+  traitsEl.innerHTML = r.traits.map(t => `<span class="trait-tag">${t}</span>`).join('');
+
+  const statsEl = document.getElementById('result-stats');
+  statsEl.innerHTML = r.stats.map(s => `
+    <div class="stat-row">
+      <div class="stat-label"><span>${s.label}</span><span>${s.value}%</span></div>
+      <div class="stat-bar"><div class="stat-fill" style="width:${s.value}%"></div></div>
+    </div>
+  `).join('');
+
+  const matchesEl = document.getElementById('result-matches');
+  matchesEl.innerHTML = r.matches.map(m => `
+    <div class="cp-match-item">
+      <span class="match-emoji">${m.emoji}</span>
+      <span class="match-name">${m.name}</span>
+      <span class="match-pct">${m.pct}</span>
+    </div>
+  `).join('');
+
+  showScreen('screen-result');
+}
+
+function restartTest() {
+  showScreen('screen-intro');
+}
+
+function shareResult() {
+  if (navigator.share) {
+    navigator.share({
+      title: '你是哪种CP体质？',
+      text: '我测出来是「' + document.getElementById('result-title').textContent + '」，快来测测你是哪种！',
+      url: window.location.href
+    });
+  } else {
+    // Copy link fallback
+    navigator.clipboard?.writeText(window.location.href).then(() => {
+      alert('链接已复制！快发给朋友一起测吧 💌');
+    }).catch(() => {
+      alert('截图分享给朋友吧！💌');
+    });
+  }
+}
+</script>
+</body>
+</html>
