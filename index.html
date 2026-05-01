@@ -501,9 +501,67 @@ footer {
   .layer-subtitle { display: none; }
   .layer-pill { font-size: 10px; padding: 6px 12px; }
 }
+
+/* ── Edit Mode ── */
+.edit-fab {
+  position: fixed;
+  bottom: 28px;
+  right: 28px;
+  z-index: 9999;
+  background: var(--ink);
+  color: var(--bg);
+  border: none;
+  padding: 12px 22px;
+  font-family: var(--sans);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  transition: all 0.2s;
+  border-radius: 2px;
+}
+.edit-fab:hover { opacity: 0.88; transform: translateY(-1px); }
+.edit-fab.on { background: var(--gold); color: #fff; }
+
+.saved-tip {
+  position: fixed;
+  bottom: 34px;
+  right: 170px;
+  z-index: 9999;
+  font-size: 12px;
+  color: var(--green);
+  font-weight: 500;
+  opacity: 0;
+  transition: opacity 0.4s;
+  letter-spacing: 0.05em;
+  pointer-events: none;
+}
+
+body.editing [contenteditable="true"] {
+  outline: 1px dashed rgba(139,105,20,0.3);
+  border-radius: 1px;
+  cursor: text;
+  min-height: 1em;
+}
+body.editing [contenteditable="true"]:hover {
+  outline: 1px dashed rgba(139,105,20,0.55);
+  background: rgba(139,105,20,0.03);
+}
+body.editing [contenteditable="true"]:focus {
+  outline: 2px solid var(--gold);
+  background: rgba(139,105,20,0.05);
+  border-radius: 2px;
+}
 </style>
 </head>
 <body>
+
+<button class="edit-fab" id="editFab" onclick="toggleEdit()">✏ 编辑文字</button>
+<div class="saved-tip" id="savedTip">✓ 已保存</div>
 
 <!-- ══ Header ══ -->
 <header class="site-header">
@@ -962,6 +1020,56 @@ function showSection(idx, el) {
   pills.forEach((p, i) => p.classList.toggle('active', i === idx));
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
+
+// ── 编辑功能 ──
+const EDIT_SEL = [
+  '.header-label','.header-title','.header-desc',
+  '.origin-label','.origin-title','.origin-body','.origin-insight',
+  '.layer-num','.layer-title','.layer-subtitle',
+  '.card-tag','.card-title','.card-body',
+  '.callout','.quote-text','.quote-attr',
+  '.flow-item','.step','.col-block',
+  'footer span'
+].join(',');
+
+let editing = false;
+
+function getEls() { return [...document.querySelectorAll(EDIT_SEL)]; }
+
+function toggleEdit() {
+  editing = !editing;
+  const fab = document.getElementById('editFab');
+  document.body.classList.toggle('editing', editing);
+  if (editing) {
+    fab.textContent = '✓ 完成编辑';
+    fab.classList.add('on');
+    getEls().forEach(el => { el.contentEditable = 'true'; });
+  } else {
+    fab.textContent = '✏ 编辑文字';
+    fab.classList.remove('on');
+    getEls().forEach(el => { el.contentEditable = 'false'; });
+    saveEdits();
+  }
+}
+
+function saveEdits() {
+  const d = {};
+  getEls().forEach((el, i) => { d[i] = el.innerHTML; });
+  localStorage.setItem('social_edits', JSON.stringify(d));
+  const tip = document.getElementById('savedTip');
+  tip.style.opacity = '1';
+  setTimeout(() => { tip.style.opacity = '0'; }, 2000);
+}
+
+function restoreEdits() {
+  try {
+    const d = JSON.parse(localStorage.getItem('social_edits') || 'null');
+    if (!d) return;
+    getEls().forEach((el, i) => { if (d[i] != null) el.innerHTML = d[i]; });
+  } catch(e) {}
+}
+
+restoreEdits();
 </script>
 </body>
 </html>
