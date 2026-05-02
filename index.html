@@ -1,1075 +1,469 @@
 <!DOCTYPE html>
-<html lang="zh">
-<head>
+<html lang="zh"><head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>社交破局能力框架</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
+<title>社交破局 · 我的方法论</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700;900&family=Noto+Sans+SC:wght@300;400;500;700&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg: #f7f4ee;
-  --bg2: #efeae0;
-  --surface: #faf8f3;
-  --surface2: #f0ece2;
-  --ink: #1a1710;
-  --ink2: #3d3928;
-  --ink3: #7a7460;
-  --ink4: #b0a890;
-  --rule: #d8d2c4;
-  --gold: #8B6914;
-  --gold2: #c49a2a;
-  --gold-bg: rgba(139,105,20,0.08);
-  --red: #8B2020;
-  --red-bg: rgba(139,32,32,0.07);
-  --green: #1a5c3a;
-  --green-bg: rgba(26,92,58,0.07);
-  --blue: #1a3a5c;
-  --blue-bg: rgba(26,58,92,0.07);
-  --serif: 'Noto Serif SC', serif;
-  --sans: 'Noto Sans SC', sans-serif;
+  --gold: #8B6914; --gold2: #c49a2a; --gold-light: #e8c86a; --gold-dim: rgba(139,105,20,0.09);
+  --red: #8B2020; --red-dim: rgba(139,32,32,0.07);
+  --green: #1a5c3a; --green-dim: rgba(26,92,58,0.07);
+  --bg: #f7f4ee; --surface: #faf8f3; --surface2: #f0ece2;
+  --border: #d8d2c4; --border2: #ccc7b8;
+  --text: #1a1710; --text2: #3d3928; --text3: #7a7460; --text4: #b0a890;
+  --serif: 'Noto Serif SC', serif; --sans: 'Noto Sans SC', sans-serif;
 }
-
 html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--ink);
-  font-family: var(--sans);
-  font-weight: 300;
-  line-height: 1.8;
-}
-
-/* ── Typography ── */
-.display {
-  font-family: var(--serif);
-  font-weight: 900;
-  line-height: 1.1;
-}
-
-.serif { font-family: var(--serif); }
-
-/* ── Header ── */
-.site-header {
-  background: var(--ink);
-  color: var(--bg);
-  padding: 80px 64px 64px;
-  position: relative;
-  overflow: hidden;
-}
-
-.site-header::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  background:
-    repeating-linear-gradient(
-      0deg,
-      transparent,
-      transparent 39px,
-      rgba(255,255,255,0.025) 39px,
-      rgba(255,255,255,0.025) 40px
-    );
-  pointer-events: none;
-}
-
-.header-inner { position: relative; max-width: 900px; }
-
-.header-label {
-  font-size: 10px;
-  font-weight: 500;
-  letter-spacing: 0.25em;
-  text-transform: uppercase;
-  color: var(--gold2);
-  margin-bottom: 24px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.header-label::after {
-  content: '';
-  flex: 1;
-  max-width: 48px;
-  height: 1px;
-  background: var(--gold2);
-  opacity: 0.5;
-}
-
-.header-title {
-  font-family: var(--serif);
-  font-size: clamp(36px, 5vw, 64px);
-  font-weight: 900;
-  line-height: 1.15;
-  color: #f7f4ee;
-  margin-bottom: 24px;
-}
-
-.header-title em {
-  font-style: normal;
-  color: var(--gold2);
-}
-
-.header-desc {
-  font-size: 15px;
-  color: rgba(247,244,238,0.55);
-  max-width: 560px;
-  line-height: 2;
-  margin-bottom: 48px;
-}
-
-.header-layers {
-  display: flex;
-  gap: 0;
-  flex-wrap: wrap;
-}
-
-.layer-pill {
-  font-size: 11px;
-  font-weight: 500;
-  letter-spacing: 0.08em;
-  padding: 8px 20px;
-  border: 1px solid rgba(255,255,255,0.12);
-  color: rgba(247,244,238,0.5);
-  cursor: pointer;
-  transition: all 0.2s;
-  white-space: nowrap;
-}
-
-.layer-pill:first-child { border-radius: 2px 0 0 2px; }
-.layer-pill:last-child { border-radius: 0 2px 2px 0; }
-.layer-pill + .layer-pill { border-left: none; }
-.layer-pill:hover { background: rgba(255,255,255,0.06); color: rgba(247,244,238,0.8); }
-.layer-pill.active { background: var(--gold); border-color: var(--gold); color: #f7f4ee; }
-
-/* ── Layout ── */
-.main {
-  max-width: 1080px;
-  margin: 0 auto;
-  padding: 72px 64px;
-}
-
-/* ── Origin Block ── */
-.origin {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  border-left: 4px solid var(--gold);
-  padding: 48px;
-  margin-bottom: 80px;
-  position: relative;
-}
-
-.origin-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--gold);
-  margin-bottom: 20px;
-}
-
-.origin-title {
-  font-family: var(--serif);
-  font-size: 22px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 20px;
-  line-height: 1.4;
-}
-
-.origin-body {
-  font-size: 14px;
-  color: var(--ink2);
-  line-height: 2;
-  max-width: 680px;
-}
-
-.origin-body p + p { margin-top: 14px; }
-
-.origin-insight {
-  margin-top: 28px;
-  padding: 18px 24px;
-  background: var(--gold-bg);
-  border-left: 2px solid var(--gold);
-  font-family: var(--serif);
-  font-size: 15px;
-  font-weight: 600;
-  color: var(--gold);
-  line-height: 1.7;
-}
-
-/* ── Section ── */
-.section { display: none; animation: fadeIn 0.3s ease; }
-.section.active { display: block; }
-
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-/* ── Layer Header ── */
-.layer-header {
-  display: flex;
-  align-items: baseline;
-  gap: 20px;
-  margin-bottom: 48px;
-  padding-bottom: 20px;
-  border-bottom: 1px solid var(--rule);
-}
-
-.layer-num {
-  font-family: var(--serif);
-  font-size: 11px;
-  color: var(--ink4);
-  letter-spacing: 0.1em;
-  white-space: nowrap;
-}
-
-.layer-title {
-  font-family: var(--serif);
-  font-size: clamp(22px, 3vw, 32px);
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.3;
-}
-
-.layer-subtitle {
-  font-size: 13px;
-  color: var(--ink3);
-  margin-left: auto;
-  white-space: nowrap;
-}
-
-/* ── Cards ── */
-.card-grid {
-  display: grid;
-  gap: 20px;
-}
-
-.card-grid.cols2 { grid-template-columns: 1fr 1fr; }
-.card-grid.cols3 { grid-template-columns: 1fr 1fr 1fr; }
-
-.card {
-  background: var(--surface);
-  border: 1px solid var(--rule);
-  padding: 32px;
-  position: relative;
-}
-
-.card.accent-gold { border-top: 3px solid var(--gold); }
-.card.accent-red { border-top: 3px solid var(--red); }
-.card.accent-green { border-top: 3px solid var(--green); }
-.card.accent-blue { border-top: 3px solid var(--blue); }
-
-.card-tag {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  margin-bottom: 14px;
-  display: block;
-}
-
-.accent-gold .card-tag { color: var(--gold); }
-.accent-red .card-tag { color: var(--red); }
-.accent-green .card-tag { color: var(--green); }
-.accent-blue .card-tag { color: var(--blue); }
-
-.card-title {
-  font-family: var(--serif);
-  font-size: 18px;
-  font-weight: 700;
-  color: var(--ink);
-  line-height: 1.35;
-  margin-bottom: 16px;
-}
-
-.card-rule {
-  width: 28px; height: 1px;
-  background: var(--rule);
-  margin-bottom: 16px;
-}
-
-.card-body {
-  font-size: 13.5px;
-  color: var(--ink2);
-  line-height: 1.9;
-}
-
-.card-body p + p { margin-top: 12px; }
-
-/* Steps */
-.steps {
-  list-style: none;
-  margin: 16px 0;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.step {
-  display: flex;
-  gap: 12px;
-  font-size: 13px;
-  color: var(--ink2);
-  line-height: 1.75;
-}
-
-.step-n {
-  flex-shrink: 0;
-  font-family: var(--serif);
-  font-size: 11px;
-  font-weight: 600;
-  width: 20px;
-  height: 20px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-top: 2px;
-  border-radius: 50%;
-}
-
-.accent-gold .step-n { background: var(--gold-bg); color: var(--gold); }
-.accent-red .step-n { background: var(--red-bg); color: var(--red); }
-.accent-green .step-n { background: var(--green-bg); color: var(--green); }
-.accent-blue .step-n { background: var(--blue-bg); color: var(--blue); }
-
-.step strong { color: var(--ink); font-weight: 500; }
-
-/* Callout */
-.callout {
-  padding: 16px 20px;
-  margin: 18px 0 0;
-  font-size: 13px;
-  line-height: 1.8;
-  border-radius: 2px;
-}
-
-.accent-gold .callout { background: var(--gold-bg); color: #5a4010; }
-.accent-red .callout { background: var(--red-bg); color: #5a1010; }
-.accent-green .callout { background: var(--green-bg); color: #0f3820; }
-.accent-blue .callout { background: var(--blue-bg); color: #0f2438; }
-
-.callout-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  opacity: 0.6;
-  margin-bottom: 6px;
-}
-
-/* Wide card */
+body { background: var(--bg); color: var(--text); font-family: var(--sans); font-weight: 300; line-height: 1.8; min-height: 100vh; -webkit-user-select: none; user-select: none; }
+.header { padding: 80px 64px 64px; background: #0e0e0e; border-bottom: 1px solid #272727; position: relative; overflow: hidden; }
+.header::after { content: ''; position: absolute; top: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(circle, rgba(200,168,74,0.06) 0%, transparent 65%); pointer-events: none; }
+.header-kicker { font-size: 10px; font-weight: 700; letter-spacing: 0.22em; text-transform: uppercase; color: #c49a2a; margin-bottom: 24px; }
+.header-title { font-family: var(--serif); font-size: clamp(40px, 6vw, 72px); font-weight: 900; line-height: 1.1; color: #f0ece4; margin-bottom: 20px; }
+.header-title .accent { color: #e8c86a; }
+.header-sub { font-size: 15px; color: #a8a298; max-width: 540px; line-height: 2; margin-bottom: 48px; }
+.nav-pills { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { font-size: 11px; font-weight: 500; letter-spacing: 0.08em; padding: 8px 18px; border: 1px solid #383530; color: #5a5650; cursor: pointer; border-radius: 2px; transition: all 0.2s; user-select: none; white-space: nowrap; }
+.pill:hover { border-color: #504d48; color: #a8a298; }
+.pill.active { background: #c49a2a; border-color: #c49a2a; color: #0e0e0e; font-weight: 700; }
+.main { max-width: 1040px; margin: 0 auto; padding: 72px 64px; }
+.section { display: none; }
+.section.active { display: block; animation: up 0.35s ease both; }
+@keyframes up { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+.block-title { font-family: var(--serif); font-size: clamp(24px, 3vw, 36px); font-weight: 900; line-height: 1.2; color: var(--text); margin-bottom: 8px; }
+.block-sub { font-size: 13px; color: var(--text3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 40px; padding-bottom: 20px; border-bottom: 1px solid var(--border); }
+.grid { display: grid; gap: 16px; }
+.grid.g2 { grid-template-columns: 1fr 1fr; }
+.grid.g3 { grid-template-columns: 1fr 1fr 1fr; }
+.card { background: var(--surface); border: 1px solid var(--border); padding: 32px; position: relative; overflow: hidden; }
+.card::before { content: ''; position: absolute; top: 0; left: 0; right: 0; height: 2px; }
+.card.g::before { background: var(--gold); }
+.card.r::before { background: var(--red); }
+.card.gr::before { background: var(--green); }
+.card-eyebrow { font-size: 10px; font-weight: 700; letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 14px; }
+.card.g .card-eyebrow { color: var(--gold); }
+.card.r .card-eyebrow { color: var(--red); }
+.card.gr .card-eyebrow { color: var(--green); }
+.card-h { font-family: var(--serif); font-size: 17px; font-weight: 700; color: var(--text); line-height: 1.4; margin-bottom: 18px; }
+.card-line { width: 24px; height: 1px; background: var(--border); margin-bottom: 18px; }
+.card-p { font-size: 13.5px; color: var(--text2); line-height: 1.95; }
+.card-p + .card-p { margin-top: 12px; }
+.card-p strong { color: var(--text); font-weight: 500; }
+.hbox { margin-top: 18px; padding: 14px 18px; font-size: 13px; line-height: 1.8; border-left: 2px solid; border-radius: 0 2px 2px 0; }
+.card.g .hbox { background: var(--gold-dim); border-color: var(--gold); color: #5a3a08; }
+.card.r .hbox { background: var(--red-dim); border-color: var(--red); color: #5a1010; }
+.card.gr .hbox { background: var(--green-dim); border-color: var(--green); color: #0f3820; }
+.hbox-label { font-size: 10px; font-weight: 700; letter-spacing: 0.15em; text-transform: uppercase; opacity: 0.6; margin-bottom: 5px; }
+.steps { list-style: none; margin: 14px 0; display: flex; flex-direction: column; gap: 10px; }
+.step { display: flex; gap: 12px; font-size: 13px; color: var(--text2); line-height: 1.75; align-items: flex-start; }
+.step-dot { flex-shrink: 0; width: 5px; height: 5px; border-radius: 50%; margin-top: 9px; }
+.card.g .step-dot { background: var(--gold); }
+.card.r .step-dot { background: var(--red); }
+.card.gr .step-dot { background: var(--green); }
+.step strong { color: var(--text); font-weight: 500; }
 .card.wide { grid-column: 1 / -1; }
-
-/* Two-col inside card */
-.two-col {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 16px;
-}
-
-.col-block {
-  padding: 14px 16px;
-  font-size: 12.5px;
-  line-height: 1.75;
-}
-
-.col-block .cb-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 6px;
-  opacity: 0.7;
-}
-
-.cb-no { background: rgba(139,32,32,0.06); color: #5a1010; }
-.cb-yes { background: rgba(26,92,58,0.06); color: #0f3820; }
-
-/* Quote */
-.quote-block {
-  background: var(--ink);
-  color: var(--bg);
-  padding: 40px 48px;
-  grid-column: 1 / -1;
-  position: relative;
-  overflow: hidden;
-}
-
-.quote-block::before {
-  content: '❝';
-  position: absolute;
-  right: 32px; top: 16px;
-  font-size: 96px;
-  color: rgba(255,255,255,0.04);
-  font-family: var(--serif);
-  line-height: 1;
-}
-
-.quote-text {
-  font-family: var(--serif);
-  font-size: clamp(16px, 2vw, 22px);
-  font-weight: 600;
-  line-height: 1.65;
-  color: #f0ece2;
-  max-width: 680px;
-  position: relative;
-}
-
-.quote-attr {
-  margin-top: 16px;
-  font-size: 11px;
-  color: rgba(240,236,226,0.35);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
-
-/* Flow strip */
-.flow-strip {
-  display: flex;
-  align-items: center;
-  gap: 0;
-  margin: 24px 0;
-  flex-wrap: wrap;
-}
-
-.flow-item {
-  padding: 10px 18px;
-  font-size: 12px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  background: var(--surface2);
-  border: 1px solid var(--rule);
-  line-height: 1.3;
-  text-align: center;
-}
-
-.flow-item + .flow-item { border-left: none; }
-
-.flow-arrow {
-  font-size: 12px;
-  color: var(--ink4);
-  padding: 0 2px;
-  flex-shrink: 0;
-}
-
-/* Nav bottom */
-.section-nav {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 64px;
-  padding-top: 32px;
-  border-top: 1px solid var(--rule);
-}
-
-.nav-btn {
-  font-size: 12px;
-  font-weight: 500;
-  color: var(--ink3);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 8px 0;
-  transition: color 0.2s;
-  background: none;
-  border: none;
-  font-family: var(--sans);
-}
-
-.nav-btn:hover { color: var(--ink); }
-.nav-btn:disabled { opacity: 0.3; cursor: default; }
-
-/* Footer */
-footer {
-  border-top: 1px solid var(--rule);
-  padding: 28px 64px;
-  display: flex;
-  justify-content: space-between;
-  font-size: 11px;
-  color: var(--ink4);
-  letter-spacing: 0.08em;
-}
-
-@media (max-width: 768px) {
-  .site-header, .main, footer { padding: 40px 24px; }
-  .card-grid.cols2, .card-grid.cols3 { grid-template-columns: 1fr; }
-  .two-col { grid-template-columns: 1fr; }
-  .layer-subtitle { display: none; }
-  .layer-pill { font-size: 10px; padding: 6px 12px; }
-}
-
-/* ── Edit Mode ── */
-.edit-fab {
-  position: fixed;
-  bottom: 28px;
-  right: 28px;
-  z-index: 9999;
-  background: var(--ink);
-  color: var(--bg);
-  border: none;
-  padding: 12px 22px;
-  font-family: var(--sans);
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-  transition: all 0.2s;
-  border-radius: 2px;
-}
-.edit-fab:hover { opacity: 0.88; transform: translateY(-1px); }
-.edit-fab.on { background: var(--gold); color: #fff; }
-
-.saved-tip {
-  position: fixed;
-  bottom: 34px;
-  right: 170px;
-  z-index: 9999;
-  font-size: 12px;
-  color: var(--green);
-  font-weight: 500;
-  opacity: 0;
-  transition: opacity 0.4s;
-  letter-spacing: 0.05em;
-  pointer-events: none;
-}
-
-body.editing [contenteditable="true"] {
-  outline: 1px dashed rgba(139,105,20,0.3);
-  border-radius: 1px;
-  cursor: text;
-  min-height: 1em;
-}
-body.editing [contenteditable="true"]:hover {
-  outline: 1px dashed rgba(139,105,20,0.55);
-  background: rgba(139,105,20,0.03);
-}
-body.editing [contenteditable="true"]:focus {
-  outline: 2px solid var(--gold);
-  background: rgba(139,105,20,0.05);
-  border-radius: 2px;
+.qcard { background: var(--gold2); padding: 44px 48px; grid-column: 1 / -1; position: relative; overflow: hidden; }
+.qcard::before { content: '❝'; position: absolute; right: 32px; bottom: -20px; font-size: 140px; color: rgba(0,0,0,0.08); font-family: var(--serif); line-height: 1; }
+.qcard-text { font-family: var(--serif); font-size: clamp(18px, 2.5vw, 26px); font-weight: 700; line-height: 1.55; color: #0e0e0e; max-width: 700px; position: relative; }
+.qcard-attr { margin-top: 16px; font-size: 11px; color: rgba(14,14,14,0.45); letter-spacing: 0.12em; text-transform: uppercase; }
+.dqcard { background: var(--text); border: 1px solid var(--border); padding: 44px 48px; grid-column: 1 / -1; position: relative; overflow: hidden; }
+.dqcard-text { font-family: var(--serif); font-size: clamp(16px, 2vw, 22px); font-weight: 600; line-height: 1.65; color: var(--bg); max-width: 680px; }
+.dqcard-attr { margin-top: 14px; font-size: 11px; color: rgba(247,244,238,0.35); letter-spacing: 0.12em; text-transform: uppercase; }
+.compare { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 16px; }
+.cblock { padding: 14px 16px; font-size: 12.5px; line-height: 1.75; }
+.cblock .cl { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; opacity: 0.65; margin-bottom: 6px; }
+.cno { background: rgba(139,32,32,0.06); color: #5a1010; }
+.cyes { background: rgba(26,92,58,0.06); color: #0f3820; }
+.flow { display: flex; align-items: center; gap: 0; flex-wrap: wrap; margin: 20px 0; }
+.fnode { padding: 9px 16px; font-size: 12px; font-weight: 500; background: var(--surface2); border: 1px solid var(--border); color: var(--text2); white-space: nowrap; }
+.fnode + .fnode { border-left: none; }
+.farr { font-size: 11px; color: var(--text3); padding: 0 4px; flex-shrink: 0; }
+.bnav { display: flex; justify-content: space-between; margin-top: 64px; padding-top: 28px; border-top: 1px solid var(--border); }
+.bnav-btn { font-size: 12px; font-weight: 500; color: var(--text3); cursor: pointer; background: none; border: none; font-family: var(--sans); padding: 6px 0; transition: color 0.2s; letter-spacing: 0.05em; }
+.bnav-btn:hover { color: var(--text2); }
+.bnav-btn:disabled { opacity: 0.25; cursor: default; }
+footer { border-top: 1px solid var(--border); padding: 24px 64px; display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); letter-spacing: 0.08em; }
+@media (max-width: 760px) {
+  .header, .main, footer { padding: 36px 24px; }
+  .grid.g2, .grid.g3 { grid-template-columns: 1fr; }
+  .compare { grid-template-columns: 1fr; }
+  .pill { font-size: 10px; padding: 6px 12px; }
 }
 </style>
 </head>
 <body>
 
-<button class="edit-fab" id="editFab" onclick="toggleEdit()">✏ 编辑文字</button>
-<div class="saved-tip" id="savedTip">✓ 已保存</div>
-
-<!-- ══ Header ══ -->
-<header class="site-header">
-  <div class="header-inner">
-    <div class="header-label">社交破局能力框架</div>
-    <h1 class="header-title">足够想要<br><em>然后去要它</em></h1>
-    <p class="header-desc">从真实经历中提炼的五层能力结构。不是表演，不是技巧堆砌——是一套从内到外、可复制的社交破局方法论。</p>
-    <div class="header-layers">
-      <div class="layer-pill active" onclick="showSection(0, this)">原点</div>
-      <div class="layer-pill" onclick="showSection(1, this)">第一层 · 信念</div>
-      <div class="layer-pill" onclick="showSection(2, this)">第二层 · 决策</div>
-      <div class="layer-pill" onclick="showSection(3, this)">第三层 · 表达</div>
-      <div class="layer-pill" onclick="showSection(4, this)">第四层 · 场域</div>
-      <div class="layer-pill" onclick="showSection(5, this)">第五层 · 升级</div>
-    </div>
+<header class="header">
+  <div class="header-kicker">社交破局 · 个人方法论</div>
+  <h1 class="header-title">
+    <span>足够想要，</span><br>
+    <span class="accent">然后去要它。</span>
+  </h1>
+  <p class="header-sub">不是社交技巧的合集。这是我从小心翼翼内耗严重到社交恐怖分子大杀四方，两周双offer机会多到数不过来，的蜕变过程。这是我的，从零到一。一切，从高三那天手抖着发出那条评论开始…</p>
+  <div class="nav-pills">
+    <div class="pill active" onclick="go(0,this)">原点</div>
+    <div class="pill" onclick="go(1,this)">信念</div>
+    <div class="pill" onclick="go(2,this)">决策</div>
+    <div class="pill" onclick="go(3,this)">表达</div>
+    <div class="pill" onclick="go(4,this)">场域</div>
+    <div class="pill" onclick="go(5,this)">升级</div>
   </div>
 </header>
 
 <main class="main">
 
-  <!-- ══ 原点 ══ -->
+  <!-- 原点 -->
   <section class="section active" id="s0">
-
-    <div class="origin">
-      <div class="origin-label">原点故事 · 这一切从哪里开始</div>
-      <div class="origin-title">高三，下雪，北大门口等了几个小时</div>
-      <div class="origin-body">
-        <p>高三某个周六，我看到树林发了一条朋友圈——他在北京。我手抖着在评论区留言"我去找你"，在群里拉了人，跟父母说了一声，打车就出发了。</p>
-        <p>上高速开始下大雪，我害怕，但心里的激动压过了害怕。到了北大门口，开始轰炸微信，没有回复。我们就站在那儿等。等到天黑，等到很冷，手冻红了，买了盒菠萝边吃边等。快绝望的时候，回复来了——明天可以见。</p>
-        <p>第二天见到他的那一刻，我差点哭出来。那天我见到了他，还认识了一群比我厉害很多的人，他们欣赏我，给我建议，对我说"年轻人的能量很好"。</p>
-        <p>那天之前，我不确定真实表达自己会发生什么。那天之后，我知道了：<strong>真实表达自己，不会死，还可能被更厉害的人看见。</strong></p>
+    <div class="block-title">这一切，从高三那天开始</div>
+    <div class="block-sub">原点 · 从零到一 · 我的来时路</div>
+    <div class="grid g2">
+      <div class="card g wide">
+        <div class="card-eyebrow">原点故事</div>
+        <div class="card-h">高三，周六，下雪，北大门口，我等了好几个小时<br>树林，我见到你了</div>
+        <div class="card-line"></div>
+        <div class="card-p">高三，周末。那天我看到树林发了条朋友圈说他在北大。我他妈当时手都在抖，"卧槽树林来北京了"，直接在评论区留言"我去找你"，拉上朋友，跟爸爸妈妈说了一声，打车就冲了。</div>
+        <div class="card-p">上高速开始下大雪，我挺害怕的，但激动这个东西根本压不住。到了北大门口，开始疯狂轰炸微信，没有回复，继续发。我们就在那儿站着等。等到天黑，等到非常冷，手冻红了，买了盒菠萝边吃边等。也担心呀，白跑一趟怎么办，但是我知道不来肯定更后悔，我已经把我能做的做到了，我真的尽全力了，不遗憾。叮，回复来了——明天可以见。卧槽。卧槽。</div>
+        <div class="card-p">第二天见到他，我差点哭出来。但是没哭，因为激动得开心，压都压不住。我操，那天，非常绚烂。</div>
+        <div class="card-p">见树林之前，还认识了一群群响的老板，抓准时机，去表达自己。其中有一个叔叔说想来感受一下年轻人的活力，后面就聊上了。跟他们说我对世界的认识，说树成林，我们不只有高考，更重要的是人生的幸福，以及在学校里说这些，被嘲笑是必然。但没想到的是我反而获得了欣赏，他们给我建议，丁丁姐还说假期可以直接去。</div>
+        <div class="card-p">我知道了一件事：<strong>真实表达自己，不会死，还可能，被欣赏。</strong></div>
+        <div class="card-p">而见到树林，带给我的是原点·行动信心的诞生。<br>原来我真诚地想靠近一个人，并且真的行动，世界是可能回应我的。<br>原来我做自己，表达自己，不一定会被骂，甚至可能被更厉害的人欣赏。<br>原来更大的世界并不是完全关着门的，我可以走过去。</div>
       </div>
-      <div class="origin-insight">
-        这是我所有勇气的第一次正反馈。后来所有的活动、上台、搭话、破冰——都是这个原点长出来的。
+      <div class="card r">
+        <div class="card-eyebrow">从零到一的真实心理</div>
+        <div class="card-h">我怕，但我更怕错过</div>
+        <div class="card-line"></div>
+        <div class="card-p">我那天是真的害怕——怕见不到，怕白跑，怕被拒绝。但有另一个感受更强：<strong>我他妈就是接受不了让这个机会在眼前溜走。</strong>他离你就几公里，没有什么理由不去。我不去我肯定后悔。</div>
+        <div class="card-p">就这么几公里的事情，我怎么可能放弃？我做不到。</div>
+        <div class="hbox">
+          <div class="hbox-label">心法</div>
+          <span>我的勇气不是"我不怕"，是"我更怕自己没试过"。机会就在我眼前，我什么都不抗拒，我就是要去，我想要，我，就是"要"。</span>
+        </div>
+      </div>
+      <div class="card gr">
+        <div class="card-eyebrow">飞轮的第一圈</div>
+        <div class="card-h">什么都没有的时候，能靠什么</div>
+        <div class="card-line"></div>
+        <div class="card-p">那次之前，我没有成果，没有人脉，没有任何"够格"的理由。我只有一个强烈到放不下的念头，和一个不想辜负我的心。只是'我要见到树林，无论如何'。</div>
+        <div class="card-p">飞轮第一圈是最难的，因为你没有任何惯性。但只要转起来，后面每一圈都比上一圈容易。那次给了我第一次正反馈，告诉我：真实表达自己是安全的。甚至还会得到奖励。</div>
+        <div class="hbox">
+          <div class="hbox-label">关键</div>
+          <span>不需要等准备好。那时候我什么都没有，但我去了。这是我从0到1的原点，如果你真的想见到一个人，想完成一件事，请大胆地，去！</span>
+        </div>
+      </div>
+      <div class="qcard">
+        <div class="qcard-text">我不想辜负自己的心，我就是想。我要给自己一个交代：我真的珍惜过，我真的争取过，我真的去了。</div>
+        <div class="qcard-attr">原点心法 · 从零到一的底层驱动</div>
       </div>
     </div>
-
-    <div class="card-grid cols2">
-
-      <div class="card accent-gold">
-        <span class="card-tag">为什么这个原点重要</span>
-        <div class="card-title">飞轮的第一圈，是最难转的那圈</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>那次之前，我没有成果，没有人脉，没有任何"够格"的理由。我只有一个强烈到放不下的念头，和一个不想辜负它的心。</p>
-          <p>正是因为什么都没有，那次才是真正的从零到一。之后每一次正反馈，都在加深同一个信念：<strong>我能认识我想认识的人。</strong></p>
-          <p>飞轮第一圈是最难的，因为你没有任何惯性。但只要转起来，后面每一圈都比上一圈容易。</p>
-        </div>
-      </div>
-
-      <div class="card accent-red">
-        <span class="card-tag">从零到一的真实心理</span>
-        <div class="card-title">怕，但更怕错过</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>我那天是害怕的——害怕见不到，害怕白跑，害怕被拒绝。但有另一个感受更强：<strong>我接受不了让这个机会在眼前溜走。</strong></p>
-          <p>不是不怕拒绝，是对失去的恐惧大于对拒绝的恐惧。这两种恐惧同时存在，但前者更重，所以我动了。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">心法</div>
-          我的勇气不是"我不怕"，而是"我更怕自己没试过"。
-        </div>
-      </div>
-
-      <div class="quote-block">
-        <div class="quote-text">我不想辜负心里那个已经看见可能性的自己。<br>我要给自己一个交代：我真的珍惜过，我真的争取过，我真的表达过。</div>
-        <div class="quote-attr">原点心法 · 从零到一的底层驱动</div>
-      </div>
-
-    </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" disabled>← 上一层</button>
-      <button class="nav-btn" onclick="showSection(1, null)">第一层 · 信念内核 →</button>
+    <div class="bnav">
+      <button class="bnav-btn" disabled>←</button>
+      <button class="bnav-btn" onclick="go(1,null)">信念 →</button>
     </div>
   </section>
 
-  <!-- ══ 第一层：信念 ══ -->
+  <!-- 信念 -->
   <section class="section" id="s1">
-    <div class="layer-header">
-      <span class="layer-num">LAYER 01</span>
-      <h2 class="layer-title">信念内核</h2>
-      <span class="layer-subtitle">所有技巧的地基</span>
+    <div class="block-title">我能认识所有，我想认识的人</div>
+    <div class="block-sub">第一层 · 信念内核 · 所有技巧的地基</div>
+    <div class="grid g2">
+      <div class="card g">
+        <div class="card-eyebrow">信念一</div>
+        <div class="card-h">我能认识我想认识的所有人</div>
+        <div class="card-line"></div>
+        <div class="card-p">走进任何场合，我的出发点不是"我够不够格认识这个人"，而是"我想不想认识这个人"。</div>
+        <div class="card-p">大多数人把社交当成权限问题——我有没有资格？我把它当成意愿问题——我想不想？这个区别决定了你的能量往哪儿去。质疑自己够不够格，能量全消耗在内耗上。当成意愿问题，能量全用在怎么认识这个人上，内耗清零，只解决how的问题。我怎么认识这个人。</div>
+        <div class="hbox">
+          <div class="hbox-label">来源</div>
+          <span>每一次真实表达之后被欣赏，这个信念就加深一层。不是天生的。</span>
+        </div>
+      </div>
+      <div class="card gr">
+        <div class="card-eyebrow">信念二</div>
+        <div class="card-h">我值得被认识，因为我真的有货</div>
+        <div class="card-line"></div>
+        <div class="card-p">我不是空着手去的。跟树林学了两三年，被高认知浸泡过；AI八小时手搓小程序，三天上线，第一天破10,000用户，现在积累40,000用户；IP从零做到3,000粉丝；大一就赚到了钱。</div>
+        <div class="card-p">当我说出这些，我不是在吹牛，是在分享。<strong>有货，而且知道自己有货</strong>——这让我说话时是笃定的，不是讨好的，不是在证明自己的。对方感受得到这两者的区别。</div>
+        <div class="hbox">
+          <div class="hbox-label">关键</div>
+          <span>信念一给我勇气走出去，信念二给我底气开口说话。两个缺一不可。</span>
+        </div>
+      </div>
+      <div class="card r wide">
+        <div class="card-eyebrow">正反馈飞轮</div>
+        <div class="card-h">信念不是天生的，是一次次滚出来的</div>
+        <div class="card-line"></div>
+        <div class="card-p">高三那次是起点——什么都没有，只有勇气，结果被欣赏了。这个正反馈告诉我真实表达是安全的。然后每一次之后都拿到了正反馈。每一次正反馈都加深那个信念，信念越深下次越敢，越敢越容易拿到结果，结果再次强化信念。</div>
+        <div class="flow">
+          <div class="fnode">鼓起勇气去</div>
+          <div class="farr">→</div>
+          <div class="fnode">拿到正反馈</div>
+          <div class="farr">→</div>
+          <div class="fnode">信念加深</div>
+          <div class="farr">→</div>
+          <div class="fnode">下次更敢</div>
+          <div class="farr">→</div>
+          <div class="fnode">更容易拿结果</div>
+          <div class="farr">→</div>
+          <div class="fnode">再次强化信念</div>
+        </div>
+        <div class="card-p">你现在感受到的那种"自然而然的主动"，是飞轮已经转起来之后的状态，不是起点。飞轮最重的时候是第一圈。</div>
+      </div>
     </div>
-
-    <div class="card-grid cols2">
-
-      <div class="card accent-gold">
-        <span class="card-tag">信念一</span>
-        <div class="card-title">我能认识我想认识的所有人</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>走进任何场合，我的出发点不是"我够不够格认识这个人"，而是"我想不想认识这个人"。</p>
-          <p>大多数人把社交当成权限问题——我有没有资格？我把它当成意愿问题——我想不想？</p>
-          <p>这个区别决定了能量消耗的方向。质疑自己够不够格，会消耗大量能量在内部。把它当意愿问题，所有能量全部用在外部——怎么认识这个人。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">来源</div>
-          每一次真实表达之后被欣赏，这个信念就加深一层。不是天生的，是一次次滚出来的。
-        </div>
-      </div>
-
-      <div class="card accent-green">
-        <span class="card-tag">信念二</span>
-        <div class="card-title">我值得被认识</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>我不是空手去的。跟树林学了两三年，被高认知浸泡过；用AI八小时手搓出小程序，三天上线，40,000用户；IP从零做到3,000粉丝；在高中生里，这些认知和行动力是真实稀缺的。</p>
-          <p>当我说出这些，我不是在吹牛，是在分享。对方感受得到这两者的区别。</p>
-          <p><strong>有货，而且知道自己有货</strong>——这让我说话时是笃定的，不是讨好的，不是证明自己的。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">关键</div>
-          信念一给我勇气走过去，信念二给我底气开口说话。两个缺一不可。
-        </div>
-      </div>
-
-      <div class="card accent-blue wide">
-        <span class="card-tag">正反馈飞轮：信念如何越来越强</span>
-        <div class="card-title">每一次正反馈，都在加深信念；信念越深，下次越敢</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>飞轮不是一开始就转得快的。起点是高三那次——什么都没有，只有勇气，结果被欣赏了。这个正反馈告诉我：真实表达是安全的。</p>
-        </div>
-        <div class="flow-strip" style="margin-top:20px">
-          <div class="flow-item">鼓起勇气表达</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-item">拿到正反馈</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-item">信念加深一层</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-item">下次更敢</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-item">更容易拿结果</div>
-          <div class="flow-arrow">→</div>
-          <div class="flow-item">再次强化信念</div>
-        </div>
-        <div class="card-body" style="margin-top:16px">
-          <p>飞轮最重的时候是第一圈。只要转起来，惯性会越来越大。你现在感受到的那种"自然而然的主动"，是飞轮已经转起来之后的状态，不是起点。</p>
-        </div>
-      </div>
-
-    </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" onclick="showSection(0, null)">← 原点</button>
-      <button class="nav-btn" onclick="showSection(2, null)">第二层 · 决策机制 →</button>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="go(0,null)">← 原点</button>
+      <button class="bnav-btn" onclick="go(2,null)">决策 →</button>
     </div>
   </section>
 
-  <!-- ══ 第二层：决策 ══ -->
+  <!-- 决策 -->
   <section class="section" id="s2">
-    <div class="layer-header">
-      <span class="layer-num">LAYER 02</span>
-      <h2 class="layer-title">决策机制</h2>
-      <span class="layer-subtitle">把害怕变成行动的开关</span>
-    </div>
-
-    <div class="card-grid cols2">
-
-      <div class="card accent-gold">
-        <span class="card-tag">核心决策公式</span>
-        <div class="card-title">这件事重要吗？<br>重要，那就去。</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>不需要准备好，不需要不害怕，不需要想清楚结果。只需要判断一件事：重不重要。</p>
-          <p>重要性确认之后，害怕自动让位。这不是压制恐惧，是给恐惧一个更大的参照物——害怕和错过相比，错过更可怕。</p>
-          <p>第二场活动，第一个人上台时我犹豫了，等到有第二个机会，我一秒都没犹豫，直接站起来说"我来"。从犹豫到不犹豫，只差了一次自我确认：这件事对我重要。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">操作方法</div>
-          问自己一个问题：如果我今天没有行动，我会后悔吗？会——那就去。不要让大脑反复开会。
+    <div class="block-title">重要吗？重要，那就去。</div>
+    <div class="block-sub">第二层 · 决策机制 · 把害怕变成行动的开关</div>
+    <div class="grid g2">
+      <div class="card g">
+        <div class="card-eyebrow">核心公式</div>
+        <div class="card-h">一个问题，关掉所有内耗</div>
+        <div class="card-line"></div>
+        <div class="card-p">不需要准备好，不需要不害怕，不需要想清楚结果。只需要判断一件事：<strong>这件事对我重不重要？</strong></div>
+        <div class="card-p">重要性确认之后，直接上去干。害怕什么的都一边去了。为什么？我就问你——害怕和错过相比，什么更可怕，错过更可怕。</div>
+        <div class="card-p">第二场活动，第一个人上台，这个人不是我，因为我犹豫了。等到说有第二个机会，我一秒都没犹豫，直接站起来说"我来"，然后就上去了。从犹豫到不犹豫，只差了一次自我确认：这件事对我重要。</div>
+        <div class="hbox">
+          <div class="hbox-label">操作</div>
+          <span>问自己：如果今天没有行动，我会后悔吗？会——那就去，想个鸡毛，卵用没有，有用的是行动。</span>
         </div>
       </div>
-
-      <div class="card accent-red">
-        <span class="card-tag">两个前提</span>
-        <div class="card-title">可以接受没有结果<br>不能接受没有行动</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p><strong>前提一：结果不全是我的责任。</strong> 我负责真诚地表达，对方接不接住是他的问题，不是我真诚的问题。这个切割让"我会不会失败"变成"我只需要做我的部分"。</p>
-          <p><strong>前提二：可以做得不好，不能一直做得不好。</strong> 第一场没上成台，我坐回去之后马上复盘：下次有机会，我要第一个上。结果第二场，我做到了。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">关键区分</div>
-          接受结果不好 ≠ 接受自己不行动。行动之后没有结果，可以复盘调整。不行动，连复盘的材料都没有。
+      <div class="card r">
+        <div class="card-eyebrow">两个前提</div>
+        <div class="card-h">可以没有结果，不能没有行动</div>
+        <div class="card-line"></div>
+        <div class="card-p"><strong>前提一：结果不全是我的责任。</strong> 我负责真诚地表达，对方接不接住是他的问题，不是我真诚的问题。这个切割让"我会不会失败"变成"我只需要做我的部分"。这一部分里还有表达方式，可能过激了，可能太平了，但这些都不是真诚的问题，真诚没错，方式可以迭代。</div>
+        <div class="card-p"><strong>前提二：可以做得不好，但不能一直做得不好。</strong> 第一发言我没上成台，我当时就在心里说：下次有机会，我要第一个上。结果真，那机会我必然拿到，我做到了。</div>
+        <div class="hbox">
+          <div class="hbox-label">关键</div>
+          <span>不行动，连复盘的材料都没有。行动了，不管怎样都有收获。</span>
         </div>
       </div>
-
-      <div class="card accent-green wide">
-        <span class="card-tag">决策误区 vs 正确姿势</span>
-        <div class="card-title">大多数人卡在哪里</div>
-        <div class="card-rule"></div>
-        <div class="two-col">
-          <div class="col-block cb-no">
-            <div class="cb-label">❌ 卡住的状态</div>
-            "我还没准备好" / "万一被拒绝怎么办" / "等我再厉害一点再去" / "感觉时机不对" / "他那么厉害应该不会理我"——这些都是大脑在拖延决策，不是真实的障碍。
+      <div class="card gr wide">
+        <div class="card-eyebrow">大多数人卡在哪</div>
+        <div class="card-h">不是能力不够，是决策机制出了问题</div>
+        <div class="card-line"></div>
+        <div class="compare">
+          <div class="cblock cno">
+            <div class="cl">❌ 卡住的状态</div>
+            <span>"我还没准备好" / "万一被拒绝怎么办" / "等我再厉害一点再去" / "感觉时机不对" / "他那么厉害应该不会理我"——这些都是大脑在找借口，不是真实的障碍。</span>
           </div>
-          <div class="col-block cb-yes">
-            <div class="cb-label">✅ 正确的姿势</div>
-            "这件事对我重要吗？" → 重要 → 去。不需要等准备好，不需要等时机完美。真实表达自己，加上你现在已经有的东西，就够了。结果是惊喜，行动是基础。
+          <div class="cblock cyes">
+            <div class="cl">✅ 正确姿势</div>
+            <span>这件事对我重要吗？→ 重要 → 去。不需要等准备好，不需要等时机完美。就一个字，去。真实表达自己，加上你现在已经有的东西，就够了。</span>
           </div>
         </div>
       </div>
-
     </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" onclick="showSection(1, null)">← 第一层 · 信念</button>
-      <button class="nav-btn" onclick="showSection(3, null)">第三层 · 表达方法 →</button>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="go(1,null)">← 信念</button>
+      <button class="bnav-btn" onclick="go(3,null)">表达 →</button>
     </div>
   </section>
 
-  <!-- ══ 第三层：表达 ══ -->
+  <!-- 表达 -->
   <section class="section" id="s3">
-    <div class="layer-header">
-      <span class="layer-num">LAYER 03</span>
-      <h2 class="layer-title">表达方法</h2>
-      <span class="layer-subtitle">有货 × 真诚 × 对焦</span>
-    </div>
-
-    <div class="card-grid cols3">
-
-      <div class="card accent-gold">
-        <span class="card-tag">第一要素</span>
-        <div class="card-title">有货：成果是最硬的通行证</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>社交技巧是放大器，但它放大的是真实的东西。没有成果，技巧只是包装；有了成果，技巧把它放大十倍。</p>
-          <p>你的年龄本来是减分项，但配上成果，反而变成加分项——"这么年轻就做出来了"。这个翻转是成果造成的，不是话术。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">第一句话的结构</div>
-          时间框架 + 动作 + 结果数据。"八小时手搓小程序，三天上线，用户现在40,000"——数字比任何头衔都有说服力。
+    <div class="block-title">内外兼修，缺一不可</div>
+    <div class="block-sub">第三层 · 表达方法 · 有货 × 真诚 × 对焦</div>
+    <div class="grid g3">
+      <div class="card g">
+        <div class="card-eyebrow">有货</div>
+        <div class="card-h">成果是最硬的通行证</div>
+        <div class="card-line"></div>
+        <div class="card-p">社交技巧是放大器，放大的是真实的东西。没有成果，技巧只是包装；有了成果，技巧把它放大十倍。</div>
+        <div class="card-p">我19岁，大一，年龄本身就是我们最大的加持。再加上略强于同龄人的成果，小程序＋ip＋商业人士＋赚到钱＋从树林那学到的认知——"这么年轻就这么强，你小子有潜力啊"。成果是你说话的底气。</div>
+        <div class="hbox">
+          <div class="hbox-label">第一句话的结构</div>
+          <span>时间框架＋动作＋结果数据。"19岁，AI八小时手搓小程序，三天上线，现在在40,000用户，IP30,00粉丝"——数字比任何头衔都有说服力。</span>
         </div>
       </div>
-
-      <div class="card accent-red">
-        <span class="card-tag">第二要素</span>
-        <div class="card-title">真诚：对方感受得到真假</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>不是表演热情，是真的在乎这个人、这次机会、这段对话。真诚会在细节里暴露——你注意到对方嗓子哑了，提醒她多喝水；你看到她双眼皮贴翘了，悄悄说一声。</p>
-          <p>这些不是技巧，是你真的在看这个人，而不是在看"这个资源"。商业场合里，人情味是稀缺品。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">真诚的底层</div>
-          真诚表达自己，是给自己一个交代，不是给对方一个表演。结果好不好是惊喜，表达本身就是完成。
+      <div class="card r">
+        <div class="card-eyebrow">真诚</div>
+        <div class="card-h">对方感受得到你是不是真的在乎他</div>
+        <div class="card-line"></div>
+        <div class="card-p">为什么我能拿到那么多机会，别人能把好东西推荐给我。因为真诚社交，是在乎别人，不是表演热情，是真的在乎这个人、这次机会、这段对话。真诚会在细节里暴露——你注意到对方嗓子哑了，提醒她多喝水；双眼皮贴翘了，悄悄说一声。</div>
+        <div class="card-p">这些不是技巧，是你真的在看这个人，不是在看"这个资源"。商业场合里，人情味是稀缺品。</div>
+        <div class="hbox">
+          <div class="hbox-label">底层逻辑</div>
+          <span>真诚表达是给自己一个交代，不是给对方一个表演。</span>
         </div>
       </div>
-
-      <div class="card accent-green">
-        <span class="card-tag">第三要素</span>
-        <div class="card-title">对焦：注意力永远在对方身上</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>大多数人介绍产品是广播模式——对所有人说同一套话，注意力在自己身上：我准备了什么，我说得够不够好。</p>
-          <p>我是点对点模式——每个人听到的版本都是专门为他调过的。注意力永远在对方：他现在想要什么，我说的有没有进去。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">具体表现</div>
-          他说他是感性的人，我立刻把产品介绍拔高到情感层面。看到夫妻带情侣项链，顺势提一句。这不是刻意，是注意力本来就在他们身上。
+      <div class="card gr">
+        <div class="card-eyebrow">对焦</div>
+        <div class="card-h">我是点对点，不是广播</div>
+        <div class="card-line"></div>
+        <div class="card-p">大多数人介绍产品是广播模式——对所有人说同一套话，注意力在自己身上：我准备了什么，我说得够不够好。</div>
+        <div class="card-p">我是点对点——每个人听到的版本都是专门为他调出来的。他说他是感性的人，我立刻把产品介绍拔高到情感层面。看到夫妻带情侣项链，顺势提一句。注意力永远在对方。</div>
+        <div class="hbox">
+          <div class="hbox-label">核心</div>
+          <span>不是我要说什么，是他现在需要什么。</span>
         </div>
       </div>
-
-      <div class="card accent-blue wide">
-        <span class="card-tag">对焦的核心机制</span>
-        <div class="card-title">读信号，不读语言——在对方意识到需要之前，你已经给出来了</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>游园会上，一个观众问"这是用什么开发的"，我队友回答了开发困难。答案没错，但不是她想要的。我没有等她说"我听不懂"，我从她的脚尖站位和表情已经读到了：这个方向她不感兴趣。</p>
-          <p>肢体信号是印证，不是来源。我在队友开口之前就已经知道那个答案跑偏了——因为我清楚她问这个问题想要的是什么。肢体反应只是再次确认了这个判断。</p>
-          <p>你读的不是对方的话，你读的是对方的状态。而且是在他们自己还没意识到的情况下，你已经感知到并调整了。</p>
-        </div>
-        <div class="two-col" style="margin-top:16px">
-          <div class="col-block cb-no">
-            <div class="cb-label">普通模式</div>
-            对方说了什么 → 我根据他说的话来回应 → 信息滞后，容易跑偏
+      <div class="card g wide">
+        <div class="card-eyebrow">对焦的核心机制</div>
+        <div class="card-h">在对方意识到需要之前，我已经给出来了</div>
+        <div class="card-line"></div>
+        <div class="card-p">黑客松介绍产品的游园会上，一个观众问"这是用什么开发的"，我队友回答了开发困难。答案没错，但不是她想要的。我没等她说"我听不懂"——从她的脚尖站位和表情，我已经读到了：这个方向她不感兴趣。</div>
+        <div class="card-p"><strong>肢体反应是印证，不是来源。</strong> 我在队友开口之前就已经知道那个答案跑偏了。她的表情只是再次确认了我的判断。我读的不是她的话，是她的状态。</div>
+        <div class="compare" style="margin-top:16px">
+          <div class="cblock cno">
+            <div class="cl">普通模式</div>
+            <span>对方说了什么 → 我根据他说的话来回应 → 信息滞后，容易跑偏</span>
           </div>
-          <div class="col-block cb-yes">
-            <div class="cb-label">对焦模式</div>
-            对方的状态（话+表情+身体）→ 我判断他现在需要什么 → 给出那个 → 他的反应确认对不对 → 继续调整
+          <div class="cblock cyes">
+            <div class="cl">对焦模式</div>
+            <span>判断他现在需要什么 → 给出那个 → 用他的应反状态（话＋表情＋身体）→ 继续调整</span>
           </div>
         </div>
       </div>
-
     </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" onclick="showSection(2, null)">← 第二层 · 决策</button>
-      <button class="nav-btn" onclick="showSection(4, null)">第四层 · 场域能力 →</button>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="go(2,null)">← 决策</button>
+      <button class="bnav-btn" onclick="go(4,null)">场域 →</button>
     </div>
   </section>
 
-  <!-- ══ 第四层：场域 ══ -->
+  <!-- 场域 -->
   <section class="section" id="s4">
-    <div class="layer-header">
-      <span class="layer-num">LAYER 04</span>
-      <h2 class="layer-title">场域能力</h2>
-      <span class="layer-subtitle">窗口不是等来的，是造出来的</span>
-    </div>
-
-    <div class="card-grid cols2">
-
-      <div class="card accent-gold">
-        <span class="card-tag">搭话：产品切入法</span>
-        <div class="card-title">先聊他们的东西，再说自己的事</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>不要一上来就介绍自己。先从对方的产品或展位入手，让对方先开口，你先听。等关系热了，再自然地引出自己相关的经历和成果。</p>
-        </div>
+    <div class="block-title">窗口不是等来的，是我自己撬出来的</div>
+    <div class="block-sub">第四层 · 场域能力 · 四个具体方法</div>
+    <div class="grid g2">
+      <div class="card g">
+        <div class="card-eyebrow">搭话 · 产品切入法</div>
+        <div class="card-h">先聊他们的东西，再说自己的事</div>
+        <div class="card-line"></div>
+        <div class="card-p">不要一上来就介绍自己。先从对方的产品或展位入手，让他们先说，你先听。等气氛热了，再自然引出自己的经历和成果。</div>
         <ul class="steps">
-          <li class="step"><span class="step-n">1</span><span><strong>问产品</strong> — 从他们展位上的东西开始，让他们先说</span></li>
-          <li class="step"><span class="step-n">2</span><span><strong>聊共同话题</strong> — 找到交集，气氛热起来</span></li>
-          <li class="step"><span class="step-n">3</span><span><strong>引出自己成果</strong> — 时机到了，自然地说"我这边也有做类似的事"</span></li>
-          <li class="step"><span class="step-n">4</span><span><strong>加微信</strong> — 对方已经对你感兴趣，这一步水到渠成</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>问产品</strong> — 从他们已有的东西开始聊，降低对方防御</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>找交集</strong> — 聊着聊着找到跟自己有关的点</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>引出成果</strong> — 时机到了，自然说"我这边也在做类似的事"，开始介绍自己</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>加微信</strong> — 对方已经对你感兴趣，这一步水到渠成</span></li>
         </ul>
-        <div class="callout">
-          <div class="callout-label">原理</div>
-          让对方先有参与感，防御心最低的时候再亮出自己。顺序反了就是推销，顺序对了就是交朋友。
+        <div class="hbox">
+          <div class="hbox-label">原理</div>
+          <span>顺序反了就是推销，顺序对了就是交朋友。</span>
         </div>
       </div>
-
-      <div class="card accent-red">
-        <span class="card-tag">上台：判断框架</span>
-        <div class="card-title">这个场子的人，是我想认识的吗？</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>上台发言是最高效的曝光方式——一次发言等于同时跟全场所有人打了招呼。但不是每个场合都值得全力上场。</p>
-        </div>
-        <div class="two-col">
-          <div class="col-block cb-no">
-            <div class="cb-label">❌ 不值得</div>
-            场子冷、听众不是你想认识的人、你没有值得说的成果
+      <div class="card r">
+        <div class="card-eyebrow">上台 · 判断框架</div>
+        <div class="card-h">这个场子的人，是我想认识的吗？</div>
+        <div class="card-line"></div>
+        <div class="card-p">上台发言是最高效的曝光——一次等于同时跟全场所有人打了招呼。但不是每个场合都值得。</div>
+        <div class="compare">
+          <div class="cblock cno">
+            <div class="cl">不值得</div>
+            <span>场子冷、听众不是你想认识的人、你没有值得说的成果</span>
           </div>
-          <div class="col-block cb-yes">
-            <div class="cb-label">✅ 值得</div>
-            场子质量高、听众是你的目标人群、你有真实成果、上完能留联系方式
+          <div class="cblock cyes">
+            <div class="cl">值得</div>
+            <span>场子质量高、有你想认识的人、听众是你目标、你有真实成果或探索</span>
           </div>
         </div>
-        <div class="callout" style="margin-top:16px">
-          <div class="callout-label">台上三段式</div>
-          亮成果（数字+时间）→ 说过程（真实细节，包括困难）→ 降门槛（"这不难，你也能做"）→ 留入口（"感兴趣欢迎加微信"）
+        <div class="hbox" style="margin-top:16px">
+          <div class="hbox-label">台上三段式</div>
+          <span>亮成果（数字+时间）→ 说过程（真实细节，包括困难）→ 降门槛（"这不难你也能做"）→ 留入口（"感兴趣欢迎讨论"）</span>
         </div>
       </div>
-
-      <div class="card accent-green">
-        <span class="card-tag">破冰：主动制造场域</span>
-        <div class="card-title">没有人主导的场合，你来主导</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>黑客松现场，大家都在等别人先动，气氛沉闷。我假装工作人员，拿起话筒让大家做自我介绍。没人怀疑，所有人配合，顺势认识了全场。</p>
-        </div>
+      <div class="card gr">
+        <div class="card-eyebrow">破冰 · 假装工作人员法</div>
+        <div class="card-h">没人主导的场合，我来主导</div>
+        <div class="card-line"></div>
+        <div class="card-p">黑客松现场，大家都在等别人先动，气氛死的。我直接拿起话筒让大家做自我介绍，假装工作人员。没人怀疑，所有人配合，顺势认识了全场。</div>
         <ul class="steps">
-          <li class="step"><span class="step-n">1</span><span><strong>判断场合</strong> — 氛围沉闷、没有人在主导</span></li>
-          <li class="step"><span class="step-n">2</span><span><strong>物理上主动</strong> — 站起来、拿话筒，身体动作本身就是信号</span></li>
-          <li class="step"><span class="step-n">3</span><span><strong>一句话启动</strong> — "我们来做个自我介绍吧"，不需要解释身份</span></li>
-          <li class="step"><span class="step-n">4</span><span><strong>顺势认识所有人</strong> — 你已经是这个房间里最被记住的人</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>判断</strong> — 氛围沉闷、没人主导</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>站起来</strong> — 物理上的主动本身就是信号</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>一句话启动</strong> — "我们来做个自我介绍吧"，不需要解释身份</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>认识所有人</strong> — 我已经是这个房间最被记住的人</span></li>
         </ul>
-        <div class="callout">
-          <div class="callout-label">原理</div>
-          秩序真空里，第一个站出来的人天然获得权威感。不需要资格，只需要行动。
+        <div class="hbox">
+          <div class="hbox-label">原理</div>
+          <span>秩序真空里，第一个站出来的人天然有权威感。不需要资格，只需要行动。不要限制自己，能你能行。规则范围内，最大程度"玩"。</span>
         </div>
       </div>
-
-      <div class="card accent-blue">
-        <span class="card-tag">信息差：问志愿者法</span>
-        <div class="card-title">规则是公开的，但没人去问</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>黑客松游园会前，我提前问志愿者：导师会怎么参与评奖？游客和导师的评分比例是多少？产品有什么格式要求？</p>
-          <p>得知导师会混在游客里之后，当别人都在展位等人来，我主动去找每一个可能是导师的人介绍产品。发现两个导师还不了解我们的项目，立刻上前介绍，他们露出非常满意的笑容。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">原理</div>
-          信息优势 = 主动问一句。成本极低，但几乎没有人去做。知道规则，才能在别人休息的时候去争取票数。
+      <div class="card g">
+        <div class="card-eyebrow">信息差 · 问志愿者法</div>
+        <div class="card-h">规则是公开的，但没人去问</div>
+        <div class="card-line"></div>
+        <div class="card-p">黑客松游园会前，我跟他们聊天，其中就包括了：导师怎么参与评奖？评分比例是多少？</div>
+        <div class="card-p">还有很多隐藏信息。得知导师会混在游客里之后，当别人都在等人来，我主动去找每个可能是导师的人。发现两个导师还不了解我们项目，立刻上前介绍，他们露出非常满意的笑容。</div>
+        <div class="hbox">
+          <div class="hbox-label">原理</div>
+          <span>信息优势＝主动问一句。成本极低，但几乎没人去做。知道规则，才能在别人休息的时候去争取票数。</span>
         </div>
       </div>
-
     </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" onclick="showSection(3, null)">← 第三层 · 表达</button>
-      <button class="nav-btn" onclick="showSection(5, null)">第五层 · 升级方向 →</button>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="go(3,null)">← 表达</button>
+      <button class="bnav-btn" onclick="go(5,null)">升级 →</button>
     </div>
   </section>
 
-  <!-- ══ 第五层：升级 ══ -->
+  <!-- 升级 -->
   <section class="section" id="s5">
-    <div class="layer-header">
-      <span class="layer-num">LAYER 05</span>
-      <h2 class="layer-title">升级方向</h2>
-      <span class="layer-subtitle">从高能爆发，走向低耗高转化</span>
-    </div>
-
-    <div class="card-grid cols2">
-
-      <div class="card accent-gold">
-        <span class="card-tag">现阶段状态</span>
-        <div class="card-title">飞轮已经转起来了</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>你现在的方式是高能爆发型——全身能量全开，情绪饱满，拿到结果，但事后需要缓很久。第一场AI大会之后，你说自己缓了非常非常久。</p>
-          <p>这个模式在早期是必要的，因为惯性还不够，需要用力推。但如果每次都这样，不可持续，而且有些场合根本不值得你全力燃烧。</p>
-        </div>
-        <div class="callout">
-          <div class="callout-label">已经验证的东西</div>
-          信念 · 决策机制 · 表达方式 · 场域能力——这四层已经跑通了，不需要再证明。现在要解决的是效率问题。
+    <div class="block-title">从高能爆发，走向低耗高转化</div>
+    <div class="block-sub">第五层 · 升级方向 · 飞轮转起来之后</div>
+    <div class="grid g2">
+      <div class="card g">
+        <div class="card-eyebrow">现阶段</div>
+        <div class="card-h">飞轮已经转起来了，但代价有点高</div>
+        <div class="card-line"></div>
+        <div class="card-p">我现在的方式是高能爆发型——全身能量全开，情绪饱满，拿到结果，但事后要缓很久。第一场AI大会之后，我真的缓了非常非常久。</div>
+        <div class="card-p">这个模式在早期是必要的，因为惯性还不够，需要用力推。但如果每次都这样，不可持续。而且有些场合根本不值得全力燃烧。</div>
+        <div class="hbox">
+          <div class="hbox-label">已验证的东西</div>
+          <span>信念 · 决策 · 表达 · 场域——这四层跑通了，不需要再证明。现在要解决的是效率问题。</span>
         </div>
       </div>
-
-      <div class="card accent-green">
-        <span class="card-tag">升级目标</span>
-        <div class="card-title">60% 能量，完成 80% 转化</div>
-        <div class="card-rule"></div>
-        <div class="card-body">
-          <p>下一步不是更猛，而是更稳。学会判断每个场合值得投入多少能量：大上场、中上场、还是小上场。</p>
-        </div>
+      <div class="card r">
+        <div class="card-eyebrow">升级目标</div>
+        <div class="card-h">60% 能量，完成 80% 转化</div>
+        <div class="card-line"></div>
+        <div class="card-p">下一步不是更猛，而是更稳。学会判断每个场合值得投入多少：大上场、中上场还是小上场。</div>
         <ul class="steps">
-          <li class="step"><span class="step-n">1</span><span><strong>保留火种</strong> — "不辜负"的底层驱动永远要有，这是你的根</span></li>
-          <li class="step"><span class="step-n">2</span><span><strong>判断场合等级</strong> — 这场是战略级还是日常级？不是每场都需要全力以赴</span></li>
-          <li class="step"><span class="step-n">3</span><span><strong>精准筛选对象</strong> — 现在是允许所有人靠近，下一步是主动筛选，把能量给最值得的人</span></li>
-          <li class="step"><span class="step-n">4</span><span><strong>用能力吸引，而非强情绪</strong> — 情绪是加分项，不应该是唯一的武器</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>保留火种</strong> — "真诚"的底层驱动永远要有，这是根</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>判断等级</strong> — 这场是战略级还是日常级？不是每场都要全力</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>主动筛选</strong> — 现在是允许所有人靠近，下一步是我来筛选</span></li>
+          <li class="step"><span class="step-dot"></span><span><strong>用能力吸引</strong> — 情绪是加分项，不该是唯一武器</span></li>
         </ul>
       </div>
-
-      <div class="quote-block">
-        <div class="quote-text">可以接受自己做得不好，但不能接受自己一直做得不好。<br>每次行动之后问自己：下次我怎么做得更好？然后真的去做。</div>
-        <div class="quote-attr">升级心法 · 持续迭代的底层逻辑</div>
+      <div class="dqcard">
+        <div class="dqcard-text">可以接受自己做得不好，但不能接受自己一直做得不好。每次行动之后问自己：下次我怎么做得更好？然后真的去做。</div>
+        <div class="dqcard-attr">升级心法 · 持续迭代的底层逻辑</div>
       </div>
-
     </div>
-
-    <div class="section-nav">
-      <button class="nav-btn" onclick="showSection(4, null)">← 第四层 · 场域</button>
-      <button class="nav-btn" disabled>已到最后一层</button>
+    <div class="bnav">
+      <button class="bnav-btn" onclick="go(4,null)">← 场域</button>
+      <button class="bnav-btn" disabled>已到最后</button>
     </div>
   </section>
 
 </main>
 
 <footer>
-  <span>社交破局能力框架 · 五层结构</span>
-  <span>信念 · 决策 · 表达 · 场域 · 升级</span>
+  <span>社交破局 · 个人方法论</span>
+  <span>原点 · 信念 · 决策 · 表达 · 场域 · 升级</span>
 </footer>
 
 <script>
-const sections = ['s0','s1','s2','s3','s4','s5'];
-const pills = document.querySelectorAll('.layer-pill');
-
-function showSection(idx, el) {
-  sections.forEach((id, i) => {
-    const s = document.getElementById(id);
-    s.classList.toggle('active', i === idx);
-  });
-  pills.forEach((p, i) => p.classList.toggle('active', i === idx));
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-// ── 编辑功能 ──
-const EDIT_SEL = [
-  '.header-label','.header-title','.header-desc',
-  '.origin-label','.origin-title','.origin-body','.origin-insight',
-  '.layer-num','.layer-title','.layer-subtitle',
-  '.card-tag','.card-title','.card-body',
-  '.callout','.quote-text','.quote-attr',
-  '.flow-item','.step','.col-block',
-  'footer span'
-].join(',');
-
-let editing = false;
-
-function getEls() { return [...document.querySelectorAll(EDIT_SEL)]; }
-
-function toggleEdit() {
-  editing = !editing;
-  const fab = document.getElementById('editFab');
-  document.body.classList.toggle('editing', editing);
-  if (editing) {
-    fab.textContent = '✓ 完成编辑';
-    fab.classList.add('on');
-    getEls().forEach(el => { el.contentEditable = 'true'; });
-  } else {
-    fab.textContent = '✏ 编辑文字';
-    fab.classList.remove('on');
-    getEls().forEach(el => { el.contentEditable = 'false'; });
-    saveEdits();
-  }
-}
-
-function saveEdits() {
-  const d = {};
-  getEls().forEach((el, i) => { d[i] = el.innerHTML; });
-  localStorage.setItem('social_edits', JSON.stringify(d));
-  const tip = document.getElementById('savedTip');
-  tip.style.opacity = '1';
-  setTimeout(() => { tip.style.opacity = '0'; }, 2000);
-}
-
-function restoreEdits() {
-  try {
-    const d = JSON.parse(localStorage.getItem('social_edits') || 'null');
-    if (!d) return;
-    getEls().forEach((el, i) => { if (d[i] != null) el.innerHTML = d[i]; });
-  } catch(e) {}
-}
-
-restoreEdits();
+(function(){
+var S=['s0','s1','s2','s3','s4','s5'];
+var P=document.querySelectorAll('.pill');
+window.go=function(i,e){
+  S.forEach(function(id,j){document.getElementById(id).classList.toggle('active',j===i);});
+  P.forEach(function(p,j){p.classList.toggle('active',j===i);});
+  window.scrollTo({top:0,behavior:'smooth'});
+};
+document.addEventListener('contextmenu',function(e){e.preventDefault();});
+document.addEventListener('keydown',function(e){
+  if((e.ctrlKey||e.metaKey)&&(e.key==='u'||e.key==='U'||e.key==='s'||e.key==='S'||e.key==='a'||e.key==='A')){e.preventDefault();}
+  if(e.key==='F12'||(e.ctrlKey&&e.shiftKey&&(e.key==='I'||e.key==='J'||e.key==='C'))){e.preventDefault();}
+});
+})();
 </script>
-</body>
-</html>
+
+</body></html>
